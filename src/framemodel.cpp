@@ -368,7 +368,8 @@ QFont FrameModel::getDataFont(int row, int column) const
 
     switch (column) {
     case IndYaw:
-        if (frame.GetDir() == HLTAS::LEFT || frame.GetDir() == HLTAS::RIGHT)
+        if (frame.Strafe && (frame.GetDir() == HLTAS::LEFT ||
+                             frame.GetDir() == HLTAS::RIGHT))
             return italicFont;
         break;
     case IndAutoJump:
