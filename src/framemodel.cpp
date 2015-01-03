@@ -236,10 +236,8 @@ QString FrameModel::getDataText(int row, int column) const
         break;
 
     case IndStrafeInfo:
-        if (!frame.Strafe) {
-            outstr = "-";
+        if (!frame.Strafe)
             break;
-        }
 
         if (frame.GetType() == HLTAS::MAXACCEL)
             outstr = 'A';
@@ -294,8 +292,6 @@ QString FrameModel::getDataText(int row, int column) const
         if (!frame.Strafe) {
             if (frame.GetYawPresent())
                 outstr.setNum(frame.GetYaw());
-            else
-                outstr = "-";
             break;
         }
 
@@ -317,11 +313,11 @@ QString FrameModel::getDataText(int row, int column) const
     case IndPitch:
         if (frame.PitchPresent)
             outstr.setNum(frame.GetPitch());
-        else
-            outstr = "-";
         break;
     case IndFrameTime:
         outstr = QString::fromStdString(frame.Frametime);
+        if (outstr == "-")
+            outstr = QString();
         break;
     case IndForward:
         if (frame.Forward)
