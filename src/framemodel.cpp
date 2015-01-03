@@ -501,6 +501,7 @@ void FrameModel::insertEmptyRow(int row)
     beginInsertRows(QModelIndex(), row, row);
     HLTAS::Frame frame = {};
     frame.SetRepeats(1);
+    frame.Frametime = "-";
     hltasInput.InsertFrame(row, frame);
     insertRow(row);
     endInsertRows();
