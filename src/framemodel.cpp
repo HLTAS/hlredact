@@ -509,6 +509,7 @@ bool FrameModel::removeRows(int row, int count, const QModelIndex &parent)
     for (int i = row; i < row + count; i++)
         hltasInput.RemoveFrame(i);
     endRemoveRows();
+    updateCumFrameNum();
     return true;
 }
 
