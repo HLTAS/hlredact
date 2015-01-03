@@ -61,6 +61,13 @@ void FrameView::keyPressEvent(QKeyEvent *event)
         }
         break;
 
+    case Qt::Key_L:
+        if (event->modifiers() == Qt::NoModifier) {
+            edit(getIndexByColumn(IndLgagst));
+            return;
+        }
+        break;
+
     case Qt::Key_R:
         if (event->modifiers() == Qt::NoModifier) {
             edit(getIndexByColumn(IndNumRepeat));
@@ -91,9 +98,10 @@ void FrameView::keyPressEvent(QKeyEvent *event)
         return;
 
     case Qt::Key_AsciiCircum:
-        if (currentIndex().column() == IndDB4C) {
+        if (currentIndex().column() == IndDB4C)
             ((FrameModel *)model())->toggleDB4CCeil(currentIndex().row());
-        }
+        else if (currentIndex().column() == IndLgagst)
+            ((FrameModel *)model())->toggleLgagstFullM(currentIndex().row());
         break;
     }
 

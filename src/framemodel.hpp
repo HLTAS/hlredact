@@ -30,6 +30,7 @@ public:
     bool saveProject(const QString &fileName);
 
     void toggleDB4CCeil(int row);
+    void toggleLgagstFullM(int row);
 
 private:
     HLTAS::Input hltasInput;

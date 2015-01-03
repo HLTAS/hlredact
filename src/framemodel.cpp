@@ -119,6 +119,7 @@ bool FrameModel::setData(const QModelIndex &index, const QVariant &value,
         frame.SetDucktapTimes(value.toUInt());
         break;
     case IndLgagst:
+        frame.SetLgagstTimes(value.toUInt());
         break;
     case IndJumpBug:
         frame.SetJumpbugTimes(value.toUInt());
@@ -516,5 +517,13 @@ void FrameModel::toggleDB4CCeil(int row)
     HLTAS::Frame &frame = hltasInput.GetFrame(row);
     frame.SetDbcCeilings(!frame.GetDbcCeilings());
     QModelIndex ind = index(row, IndDB4C);
+    emit dataChanged(ind, ind);
+}
+
+void FrameModel::toggleLgagstFullM(int row)
+{
+    HLTAS::Frame &frame = hltasInput.GetFrame(row);
+    frame.SetLgagstFullMaxspeed(!frame.GetLgagstFullMaxspeed());
+    QModelIndex ind = index(row, IndLgagst);
     emit dataChanged(ind, ind);
 }
