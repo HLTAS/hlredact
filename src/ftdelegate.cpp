@@ -20,17 +20,19 @@ bool FTDelegate::eventFilter(QObject *obj, QEvent *event)
     QLineEdit *editor = (QLineEdit *)obj;
     if (event->type() == QEvent::KeyPress) {
         QKeyEvent *keyEvent = (QKeyEvent *)event;
-        if (keyEvent->key() == Qt::Key_Tab)
-            return true;
-        else if (keyEvent->key() == Qt::Key_Space) {
-            emit commitData(editor);
-            emit closeEditor(editor);
-            return true;
-        } else if (keyEvent->key() == Qt::Key_Minus) {
-            editor->setText("-");
-            emit commitData(editor);
-            emit closeEditor(editor);
-            return true;
+        if (keyEvent->modifiers() == Qt::NoModifier) {
+            if (keyEvent->key() == Qt::Key_Tab)
+                return true;
+            else if (keyEvent->key() == Qt::Key_Space) {
+                emit commitData(editor);
+                emit closeEditor(editor);
+                return true;
+            } else if (keyEvent->key() == Qt::Key_Minus) {
+                editor->setText("-");
+                emit commitData(editor);
+                emit closeEditor(editor);
+                return true;
+            }
         }
     } else if (event->type() == QEvent::FocusIn)
         editor->end(false);
