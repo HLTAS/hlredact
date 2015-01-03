@@ -223,6 +223,8 @@ QString FrameModel::getHHeaderText(int section) const
 
 QString FrameModel::getDataText(int row, int column) const
 {
+#define INF_OR_NUM(val) (!(val) ? (outstr = "∞") : outstr.setNum(val))
+
     const HLTAS::Frame frame = hltasInput.GetFrames()[row];
     QString outstr;
 
@@ -258,31 +260,31 @@ QString FrameModel::getDataText(int row, int column) const
         break;
     case IndAutoJump:
         if (frame.Autojump)
-            outstr.setNum(frame.GetAutojumpTimes());
+            INF_OR_NUM(frame.GetAutojumpTimes());
         break;
     case IndDuckTap:
         if (frame.Ducktap)
-            outstr.setNum(frame.GetDucktapTimes());
+            INF_OR_NUM(frame.GetDucktapTimes());
         break;
     case IndLgagst:
         if (frame.Lgagst)
-            outstr.setNum(frame.GetLgagstTimes());
+            INF_OR_NUM(frame.GetLgagstTimes());
         break;
     case IndJumpBug:
         if (frame.Jumpbug)
-            outstr.setNum(frame.GetJumpbugTimes());
+            INF_OR_NUM(frame.GetJumpbugTimes());
         break;
     case IndDB4C:
         if (frame.Dbc)
-            outstr.setNum(frame.GetDbcTimes());
+            INF_OR_NUM(frame.GetDbcTimes());
         break;
     case IndDB4G:
         if (frame.Dbg)
-            outstr.setNum(frame.GetDbgTimes());
+            INF_OR_NUM(frame.GetDbgTimes());
         break;
     case IndDWJ:
         if (frame.Dwj)
-            outstr.setNum(frame.GetDwjTimes());
+            INF_OR_NUM(frame.GetDwjTimes());
         break;
     case IndYaw:
         if (!frame.Strafe) {
@@ -345,6 +347,8 @@ QString FrameModel::getDataText(int row, int column) const
     }
 
     return outstr;
+
+#undef INF_OR_NUM
 }
 
 Qt::ItemFlags FrameModel::flags(const QModelIndex &index) const
