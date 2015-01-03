@@ -47,6 +47,13 @@ void FrameView::keyPressEvent(QKeyEvent *event)
         }
         break;
 
+    case Qt::Key_G:
+        if (event->modifiers() == Qt::NoModifier) {
+            edit(getIndexByColumn(IndDB4G));
+            return;
+        }
+        break;
+
     case Qt::Key_I:
         if (event->modifiers() == Qt::NoModifier)
             ((FrameModel *)model())->insertEmptyRow(currentIndex().row());
@@ -78,6 +85,20 @@ void FrameView::keyPressEvent(QKeyEvent *event)
     case Qt::Key_S:
         if (event->modifiers() == Qt::NoModifier) {
             edit(getIndexByColumn(IndStrafeInfo));
+            return;
+        }
+        break;
+
+    case Qt::Key_T:
+        if (event->modifiers() == Qt::NoModifier) {
+            edit(getIndexByColumn(IndDuckTap));
+            return;
+        }
+        break;
+
+    case Qt::Key_W:
+        if (event->modifiers() == Qt::NoModifier) {
+            edit(getIndexByColumn(IndDWJ));
             return;
         }
         break;
