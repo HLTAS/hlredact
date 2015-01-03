@@ -14,7 +14,7 @@ FrameView::FrameView(QWidget *parent = nullptr)
     new QShortcut(QKeySequence("Ctrl+J"), this, SLOT(toggleJump()));
     new QShortcut(QKeySequence("Ctrl+1"), this, SLOT(toggleAttack()));
     new QShortcut(QKeySequence("Ctrl+2"), this, SLOT(toggleAttack2()));
-    new QShortcut(QKeySequence("Ctrl+L"), this, SLOT(toggleReload()));
+    new QShortcut(QKeySequence("Ctrl+R"), this, SLOT(toggleReload()));
     new QShortcut(QKeySequence("Ctrl+Up"), this, SLOT(toggleForward()));
     new QShortcut(QKeySequence("Ctrl+Down"), this, SLOT(toggleBack()));
     new QShortcut(QKeySequence("Ctrl+Left"), this, SLOT(toggleMoveLeft()));
