@@ -55,8 +55,6 @@ QVariant FrameModel::headerData(int section, Qt::Orientation orientation,
     if (orientation == Qt::Horizontal) {
         if (role == Qt::DisplayRole)
             return getHHeaderText(section);
-        else if (role == Qt::DecorationRole)
-            return getHHeaderIcon(section);
         else if (role == Qt::TextAlignmentRole && section == IndCmds)
             return Qt::AlignLeft;
     } else if (orientation == Qt::Vertical) {
@@ -212,18 +210,15 @@ QString FrameModel::getHHeaderText(int section) const
     case IndAttack: return "a1";
     case IndAttack2: return "a2";
     case IndReload: return "l";
+    case IndForward: return "↑";
+    case IndBack: return "↓";
+    case IndMoveLeft: return "←";
+    case IndMoveRight: return "→";
+    case IndMoveUp: return "•";
+    case IndMoveDown: return "✕";
     case IndCmds: return "cmds";
     }
     return QString();
-}
-
-QIcon FrameModel::getHHeaderIcon(int section) const
-{
-    switch (section) {
-    case IndForward:
-        break;
-    }
-    return QIcon();
 }
 
 QString FrameModel::getDataText(int row, int column) const

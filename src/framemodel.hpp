@@ -51,7 +51,6 @@ private:
     QBrush getDataBackground(int row, int column) const;
     QBrush getDataForeground(int row, int column) const;
     QString getHHeaderText(int section) const;
-    QIcon getHHeaderIcon(int section) const;
 
     void updateCumFrameNum();
 };
