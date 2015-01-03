@@ -33,10 +33,8 @@ bool NumRepDelegate::eventFilter(QObject *editor, QEvent *event)
                 return true;
             } else if (keyEvent->key() == Qt::Key_Minus) {
                 return true;
-            } else if (keyEvent->key() == Qt::Key_Backspace) {
+            } else if (keyEvent->key() == Qt::Key_Backspace)
                 lineEdit->end(false);
-                return true;
-            }
         } else if (keyEvent->modifiers() == Qt::ShiftModifier) {
             if (keyEvent->key() == Qt::Key_Plus) {
                 return true;
