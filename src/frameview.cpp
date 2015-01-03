@@ -4,6 +4,7 @@
 FrameView::FrameView(QWidget *parent = nullptr)
     : QTableView(parent)
 {
+    setTabKeyNavigation(false);
     horizontalHeader()->setSectionsMovable(true);
     // We will implement our own heavily customised triggers.
     setEditTriggers(QAbstractItemView::NoEditTriggers);

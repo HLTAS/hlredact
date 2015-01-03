@@ -13,7 +13,6 @@ RMainWindow::RMainWindow()
     workFrameModel = new FrameModel(tableView);
     tableView->setModel(mainFrameModel);
     tableView->resizeColumnsToContents();
-    tableView->installEventFilter(this);
 
     NumRepDelegate *numRepDelegate = new NumRepDelegate(tableView);
     tableView->setItemDelegateForColumn(IndNumRepeat, numRepDelegate);
@@ -122,18 +121,4 @@ void RMainWindow::saveACopy()
         return;
 
     mainFrameModel->saveProject(fileName);
-}
-
-bool RMainWindow::eventFilter(QObject *watched, QEvent *event)
-{
-    if (event->type() != QEvent::KeyPress)
-        return QMainWindow::eventFilter(watched, event);
-
-    QKeyEvent *keyEvent = (QKeyEvent *)event;
-    if (keyEvent->key() == Qt::Key_Tab &&
-        keyEvent->modifiers() == Qt::NoModifier) {
-        return true;
-    }
-
-    return QMainWindow::eventFilter(watched, event);
 }

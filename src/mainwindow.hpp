@@ -26,7 +26,6 @@ public:
     FrameModel *workFrameModel;
 
     RMainWindow();
-    bool eventFilter(QObject *watched, QEvent *event);
 
 private slots:
     void openProject();
