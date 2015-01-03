@@ -1,6 +1,7 @@
 #ifndef NUMREPDELEGATE_HPP
 #define NUMREPDELEGATE_HPP
 
+#include <limits>
 #include <QStyledItemDelegate>
 #include <QLineEdit>
 #include <QKeyEvent>

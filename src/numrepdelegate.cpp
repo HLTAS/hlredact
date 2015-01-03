@@ -13,6 +13,10 @@ QWidget *NumRepDelegate::createEditor(QWidget *parent,
                                       const QModelIndex &) const
 {
     QLineEdit *lineEdit = new QLineEdit(parent);
+    // int instead of unsigned int because QIntValidator only accepts int.
+    QIntValidator *validator = new QIntValidator(
+        1, std::numeric_limits<int>::max(), parent);
+    lineEdit->setValidator(validator);
     lineEdit->setAlignment(Qt::AlignRight);
     lineEdit->setFrame(false);
     return lineEdit;
