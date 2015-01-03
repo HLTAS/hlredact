@@ -29,6 +29,8 @@ public:
     bool openProject(const QString &fileName);
     bool saveProject(const QString &fileName);
 
+    void toggleDB4CCeil(int row);
+
 private:
     HLTAS::Input hltasInput;
     QVector<unsigned int> cumFrameNum;

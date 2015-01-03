@@ -124,6 +124,7 @@ bool FrameModel::setData(const QModelIndex &index, const QVariant &value,
         frame.SetJumpbugTimes(value.toUInt());
         break;
     case IndDB4C:
+        frame.SetDbcTimes(value.toUInt());
         break;
     case IndDB4G:
         frame.SetDbgTimes(value.toUInt());
@@ -508,4 +509,12 @@ bool FrameModel::removeRows(int row, int count, const QModelIndex &parent)
         hltasInput.RemoveFrame(i);
     endRemoveRows();
     return true;
+}
+
+void FrameModel::toggleDB4CCeil(int row)
+{
+    HLTAS::Frame &frame = hltasInput.GetFrame(row);
+    frame.SetDbcCeilings(!frame.GetDbcCeilings());
+    QModelIndex ind = index(row, IndDB4C);
+    emit dataChanged(ind, ind);
 }

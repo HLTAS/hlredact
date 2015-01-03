@@ -37,8 +37,6 @@ void FrameView::keyPressEvent(QKeyEvent *event)
         if (event->modifiers() == Qt::NoModifier) {
             edit(getIndexByColumn(IndDB4C));
             return;
-        } else if (event->modifiers() == Qt::ShiftModifier) {
-            return;
         }
         break;
 
@@ -91,6 +89,12 @@ void FrameView::keyPressEvent(QKeyEvent *event)
         if (event->modifiers() == Qt::NoModifier)
             ((FrameModel *)model())->removeRow(currentIndex().row());
         return;
+
+    case Qt::Key_AsciiCircum:
+        if (currentIndex().column() == IndDB4C) {
+            ((FrameModel *)model())->toggleDB4CCeil(currentIndex().row());
+        }
+        break;
     }
 
     QTableView::keyPressEvent(event);
