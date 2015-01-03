@@ -34,7 +34,7 @@ public:
 
 private:
     HLTAS::Input hltasInput;
-    QVector<unsigned int> cumFrameNum;
+    QVector<unsigned int> cumulativeFrameNums;
     QFont boldFont;
     QFont italicFont;
     QBrush brushWhite;
@@ -52,7 +52,7 @@ private:
     QBrush getDataForeground(int row, int column) const;
     QString getHHeaderText(int section) const;
 
-    void updateCumFrameNum();
+    void updateCumulativeFrameNums();
 };
 
 #endif

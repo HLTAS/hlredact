@@ -59,7 +59,7 @@ QVariant FrameModel::headerData(int section, Qt::Orientation orientation,
             return Qt::AlignLeft;
     } else if (orientation == Qt::Vertical) {
         if (role == Qt::DisplayRole)
-            return cumFrameNum[section];
+            return cumulativeFrameNums[section];
         else if (role == Qt::TextAlignmentRole)
             return (QVariant)(Qt::AlignRight | Qt::AlignVCenter);
     }
@@ -78,7 +78,7 @@ bool FrameModel::setData(const QModelIndex &index, const QVariant &value,
     switch (index.column()) {
     case IndNumRepeat:
         frame.SetRepeats(value.toUInt());
-        updateCumFrameNum();
+        updateCumulativeFrameNums();
         break;
     case IndStrafeInfo: {
         QString input = value.toString();
@@ -463,7 +463,7 @@ bool FrameModel::openProject(const QString &fileName)
     const std::vector<HLTAS::Frame> &frames = hltasInput.GetFrames();
     beginInsertRows(QModelIndex(), 0, frames.size() - 1);
     endInsertRows();
-    updateCumFrameNum();
+    updateCumulativeFrameNums();
 
     return true;
 }
@@ -475,14 +475,15 @@ bool FrameModel::saveProject(const QString &fileName)
     return true;
 }
 
-void FrameModel::updateCumFrameNum()
+void FrameModel::updateCumulativeFrameNums()
 {
     // This can be slow if there is a huge number of framebulks.
-    cumFrameNum.clear();
+    cumulativeFrameNums.clear();
     const std::vector<HLTAS::Frame> &frames = hltasInput.GetFrames();
-    cumFrameNum.append(0);
+    cumulativeFrameNums.append(0);
     for (const HLTAS::Frame &frame : frames) {
-        cumFrameNum.append(cumFrameNum.last() + frame.GetRepeats());
+        cumulativeFrameNums.append(cumulativeFrameNums.last() +
+                                   frame.GetRepeats());
     }
     emit headerDataChanged(Qt::Vertical, 0, frames.size() - 1);
 }
@@ -493,7 +494,7 @@ void FrameModel::insertDuplicateRow(int row)
     HLTAS::Frame frame = hltasInput.GetFrames()[row];
     hltasInput.InsertFrame(row, frame);
     endInsertRows();
-    updateCumFrameNum();
+    updateCumulativeFrameNums();
 }
 
 void FrameModel::insertEmptyRow(int row)
@@ -505,7 +506,7 @@ void FrameModel::insertEmptyRow(int row)
     hltasInput.InsertFrame(row, frame);
     insertRow(row);
     endInsertRows();
-    updateCumFrameNum();
+    updateCumulativeFrameNums();
 }
 
 bool FrameModel::removeRows(int row, int count, const QModelIndex &parent)
@@ -514,7 +515,7 @@ bool FrameModel::removeRows(int row, int count, const QModelIndex &parent)
     for (int i = row; i < row + count; i++)
         hltasInput.RemoveFrame(i);
     endRemoveRows();
-    updateCumFrameNum();
+    updateCumulativeFrameNums();
     return true;
 }
 
