@@ -15,6 +15,9 @@ public:
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                           const QModelIndex &index) const;
     bool eventFilter(QObject *editor, QEvent *event);
+
+private:
+    void stepBy(QLineEdit *editor, int count) const;
 };
 
 #endif

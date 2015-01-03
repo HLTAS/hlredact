@@ -1,7 +1,8 @@
 #include "numrepdelegate.hpp"
 
-static const int SINGLE_STEP = 5;
-static const int SHIFT_STEP = 20;
+static const int SMALL_STEP = 1;
+static const int NORMAL_STEP = 5;
+static const int SHIFT_STEP = 50;
 
 NumRepDelegate::NumRepDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
@@ -34,21 +35,27 @@ bool NumRepDelegate::eventFilter(QObject *editor, QEvent *event)
                 emit closeEditor(lineEdit);
                 return true;
             } else if (keyEvent->key() == Qt::Key_Equal) {
+                stepBy(lineEdit, NORMAL_STEP);
                 return true;
             } else if (keyEvent->key() == Qt::Key_Minus) {
+                stepBy(lineEdit, -NORMAL_STEP);
                 return true;
             } else if (keyEvent->key() == Qt::Key_Backspace)
                 lineEdit->end(false);
         } else if (keyEvent->modifiers() == Qt::ShiftModifier) {
             if (keyEvent->key() == Qt::Key_Plus) {
+                stepBy(lineEdit, SHIFT_STEP);
                 return true;
             } else if (keyEvent->key() == Qt::Key_Underscore) {
+                stepBy(lineEdit, -SHIFT_STEP);
                 return true;
             }
-        } else if (keyEvent->modifiers() == Qt::AltModifier) {
+        } else if (keyEvent->modifiers() == Qt::ControlModifier) {
             if (keyEvent->key() == Qt::Key_Equal) {
+                stepBy(lineEdit, SMALL_STEP);
                 return true;
             } else if (keyEvent->key() == Qt::Key_Minus) {
+                stepBy(lineEdit, -SMALL_STEP);
                 return true;
             }
         }
@@ -58,4 +65,16 @@ bool NumRepDelegate::eventFilter(QObject *editor, QEvent *event)
     }
 
     return QStyledItemDelegate::eventFilter(editor, event);
+}
+
+void NumRepDelegate::stepBy(QLineEdit *editor, int count) const
+{
+    int val = editor->text().toInt();
+    if (count > 0 && std::numeric_limits<int>::max() - val < count)
+        val = std::numeric_limits<int>::max();
+    else if (count < 0 && val <= std::abs(count))
+        val = 1;
+    else
+        val += count;
+    editor->setText(QString::number(val));
 }
