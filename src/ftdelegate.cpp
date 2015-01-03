@@ -26,6 +26,11 @@ bool FTDelegate::eventFilter(QObject *obj, QEvent *event)
             emit commitData(editor);
             emit closeEditor(editor);
             return true;
+        } else if (keyEvent->key() == Qt::Key_Minus) {
+            editor->setText("-");
+            emit commitData(editor);
+            emit closeEditor(editor);
+            return true;
         }
     } else if (event->type() == QEvent::FocusIn)
         editor->end(false);
