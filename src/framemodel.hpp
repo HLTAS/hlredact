@@ -36,6 +36,7 @@ private:
     HLTAS::Input hltasInput;
     QVector<unsigned int> cumFrameNum;
     QFont boldFont;
+    QFont italicFont;
     QBrush brushWhite;
     QBrush brushCyan;
     QBrush brushMagenta;

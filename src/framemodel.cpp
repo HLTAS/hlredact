@@ -14,6 +14,7 @@ FrameModel::FrameModel(QObject *parent)
       brushBlue(Qt::blue)
 {
     boldFont.setBold(true);
+    italicFont.setItalic(true);
 }
 
 int FrameModel::rowCount(const QModelIndex &) const
@@ -367,6 +368,10 @@ QFont FrameModel::getDataFont(int row, int column) const
     HLTAS::Frame frame = hltasInput.GetFrames()[row];
 
     switch (column) {
+    case IndYaw:
+        if (frame.GetDir() == HLTAS::LEFT || frame.GetDir() == HLTAS::RIGHT)
+            return italicFont;
+        break;
     case IndAutoJump:
     case IndDuckTap:
     case IndLgagst:
