@@ -315,7 +315,10 @@ QString FrameModel::getDataText(int row, int column) const
         }
         break;
     case IndPitch:
-        outstr.setNum(frame.GetPitch());
+        if (frame.PitchPresent)
+            outstr.setNum(frame.GetPitch());
+        else
+            outstr = "-";
         break;
     case IndFrameTime:
         outstr = QString::fromStdString(frame.Frametime);
@@ -496,7 +499,7 @@ void FrameModel::insertDuplicateRow(int row)
 void FrameModel::insertEmptyRow(int row)
 {
     beginInsertRows(QModelIndex(), row, row);
-    HLTAS::Frame frame;
+    HLTAS::Frame frame = {};
     hltasInput.InsertFrame(row, frame);
     insertRow(row);
     endInsertRows();
