@@ -52,10 +52,8 @@ bool YawDelegate::eventFilter(QObject *editor, QEvent *event)
 
             return true;
         }
-    } else if (event->type() == QEvent::FocusIn && !isPointRequired()) {
+    } else if (event->type() == QEvent::FocusIn && !isPointRequired())
         ((QLineEdit *)editor)->end(false);
-        return true;
-    }
 
     return QStyledItemDelegate::eventFilter(editor, event);
 }
