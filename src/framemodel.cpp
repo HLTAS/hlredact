@@ -192,7 +192,7 @@ bool FrameModel::setData(const QModelIndex &index, const QVariant &value,
 QString FrameModel::getHHeaderText(int section) const
 {
     switch (section) {
-    case IndNumRepeat: return "r";
+    case IndNumRepeat: return "n";
     case IndStrafeInfo: return "s";
     case IndAutoJump: return "aj";
     case IndDuckTap: return "dt";
@@ -209,7 +209,7 @@ QString FrameModel::getHHeaderText(int section) const
     case IndJump: return "j";
     case IndAttack: return "a1";
     case IndAttack2: return "a2";
-    case IndReload: return "l";
+    case IndReload: return "r";
     case IndForward: return "↑";
     case IndBack: return "↓";
     case IndMoveLeft: return "←";
