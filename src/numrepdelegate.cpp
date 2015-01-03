@@ -25,8 +25,9 @@ QWidget *NumRepDelegate::createEditor(QWidget *parent,
 
 bool NumRepDelegate::eventFilter(QObject *editor, QEvent *event)
 {
+    QLineEdit *lineEdit = (QLineEdit *)editor;
+
     if (event->type() == QEvent::KeyPress) {
-        QLineEdit *lineEdit = (QLineEdit *)editor;
         QKeyEvent *keyEvent = (QKeyEvent *)event;
 
         if (keyEvent->modifiers() == Qt::NoModifier) {
@@ -58,6 +59,23 @@ bool NumRepDelegate::eventFilter(QObject *editor, QEvent *event)
                 stepBy(lineEdit, -SMALL_STEP);
                 return true;
             }
+        }
+    } else if (event->type() == QEvent::Wheel) {
+        QWheelEvent *wheelEvent = (QWheelEvent *)event;
+        Qt::KeyboardModifiers keyMods = QGuiApplication::keyboardModifiers();
+
+        if (keyMods == Qt::NoModifier) {
+            stepBy(lineEdit, wheelEvent->angleDelta().y() > 0 ?
+                   NORMAL_STEP : -NORMAL_STEP);
+            return true;
+        } else if (keyMods == Qt::ShiftModifier) {
+            stepBy(lineEdit, wheelEvent->angleDelta().y() > 0 ?
+                   SHIFT_STEP : -SHIFT_STEP);
+            return true;
+        } else if (keyMods == Qt::ControlModifier) {
+            stepBy(lineEdit, wheelEvent->angleDelta().y() > 0 ?
+                   SMALL_STEP : -SMALL_STEP);
+            return true;
         }
     } else if (event->type() == QEvent::FocusIn) {
         ((QLineEdit *)editor)->end(false);

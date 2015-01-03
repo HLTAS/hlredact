@@ -3,6 +3,7 @@
 
 #include <limits>
 #include <QStyledItemDelegate>
+#include <QGuiApplication>
 #include <QLineEdit>
 #include <QKeyEvent>
 
