@@ -2,6 +2,7 @@ TARGET = hlredact
 INCLUDEPATH += src libhltas/src
 CONFIG += c++14
 QT += widgets
+LIBS += -lboost_system -lboost_thread
 
 HEADERS += \
     libhltas/src/hltas.hpp \
