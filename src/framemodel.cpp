@@ -237,7 +237,7 @@ QString FrameModel::getDataText(int row, int column) const
 
     case IndStrafeInfo:
         if (!frame.Strafe) {
-            outstr = "NA";
+            outstr = "-";
             break;
         }
 
