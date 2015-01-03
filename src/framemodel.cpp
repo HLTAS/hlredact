@@ -464,6 +464,7 @@ bool FrameModel::openProject(const QString &fileName)
     beginInsertRows(QModelIndex(), 0, frames.size() - 1);
     endInsertRows();
     updateCumulativeFrameNums();
+    emit dataChanged(index(0, 0), index(frames.size() - 1, IndLength));
 
     return true;
 }
