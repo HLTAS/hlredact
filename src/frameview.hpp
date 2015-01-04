@@ -31,6 +31,7 @@ private:
     void toggleButton(int column);
     QModelIndex getIndexByColumn(int column) const;
     void updateSaveColumns(int startRow, int endRow);
+    void removeSelectedFrames();
 
 protected:
     void keyPressEvent(QKeyEvent *event);

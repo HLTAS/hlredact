@@ -25,6 +25,16 @@ FrameView::FrameView(QWidget *parent = nullptr)
     new QShortcut(QKeySequence("Ctrl+Shift+Down"), this, SLOT(toggleMoveDown()));
 }
 
+void FrameView::removeSelectedFrames()
+{
+    for (;;) {
+        QModelIndexList selected = selectedIndexes();
+        if (selected.isEmpty())
+            break;
+        model()->removeRow(selected.front().row());
+    }
+}
+
 void FrameView::keyPressEvent(QKeyEvent *event)
 {
     if (!currentIndex().isValid()) {
@@ -33,7 +43,7 @@ void FrameView::keyPressEvent(QKeyEvent *event)
     }
 
     if (event->key() == Qt::Key_Delete && event->modifiers() == Qt::NoModifier) {
-        ((FrameModel *)model())->removeRow(currentIndex().row());
+        removeSelectedFrames();
         return;
     }
 
