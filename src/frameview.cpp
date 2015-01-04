@@ -207,3 +207,15 @@ QModelIndex FrameView::getIndexByColumn(int column) const
 {
     return model()->index(currentIndex().row(), column);
 }
+
+void FrameView::dataChanged(const QModelIndex &topLeft,
+                            const QModelIndex &bottomRight,
+                            const QVector<int> &roles)
+{
+    const FrameModel *frameModel = (FrameModel *)model();
+    for (int i = topLeft.row(); i <= bottomRight.row(); i++) {
+        if (frameModel->isSaveLine(i))
+            setSpan(i, 0, 1, IndLength);
+    }
+    QTableView::dataChanged(topLeft, bottomRight, roles);
+}

@@ -32,11 +32,14 @@ public:
     void toggleDB4CCeil(int row);
     void toggleLgagstFullM(int row);
 
+    bool isSaveLine(int row) const;
+
 private:
     HLTAS::Input hltasInput;
     QVector<unsigned int> cumulativeFrameNums;
     QFont boldFont;
     QFont italicFont;
+    QBrush brushBlack;
     QBrush brushWhite;
     QBrush brushCyan;
     QBrush brushMagenta;
@@ -46,7 +49,7 @@ private:
     QBrush brushDarkGray;
     QBrush brushBlue;
 
-    QString getDataText(int row, int column) const;
+    QString getDataText(int row, int column, int role) const;
     QFont getDataFont(int row, int column) const;
     QBrush getDataBackground(int row, int column) const;
     QBrush getDataForeground(int row, int column) const;

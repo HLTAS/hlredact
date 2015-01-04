@@ -31,6 +31,8 @@ private:
 
 protected:
     void keyPressEvent(QKeyEvent *event);
+    void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight,
+                     const QVector<int> &roles = QVector<int>());
 
 private:
     QModelIndex getIndexByColumn(int column) const;

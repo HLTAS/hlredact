@@ -4,6 +4,7 @@
 
 FrameModel::FrameModel(QObject *parent)
     : QAbstractTableModel(parent),
+      brushBlack(Qt::black),
       brushWhite(Qt::white),
       brushCyan(Qt::cyan),
       brushMagenta(Qt::magenta),
@@ -29,14 +30,15 @@ int FrameModel::columnCount(const QModelIndex &) const
 
 QVariant FrameModel::data(const QModelIndex &index, int role) const
 {
-
     if (role == Qt::DisplayRole || role == Qt::EditRole)
-        return getDataText(index.row(), index.column());
+        return getDataText(index.row(), index.column(), role);
     else if (role == Qt::BackgroundRole)
         return getDataBackground(index.row(), index.column());
     else if (role == Qt::ForegroundRole)
         return getDataForeground(index.row(), index.column());
     else if (role == Qt::TextAlignmentRole) {
+        if (isSaveLine(index.row()) && index.column() == 0)
+            return (QVariant)(Qt::AlignLeft | Qt::AlignVCenter);
         if (index.column() == IndCmds)
             return (QVariant)(Qt::AlignLeft | Qt::AlignVCenter);
         else if (index.column() == IndNumRepeat)
@@ -221,11 +223,22 @@ QString FrameModel::getHHeaderText(int section) const
     return QString();
 }
 
-QString FrameModel::getDataText(int row, int column) const
+QString FrameModel::getDataText(int row, int column, int role) const
 {
 #define INF_OR_NUM(val) (!(val) ? (outstr = "∞") : outstr.setNum(val))
 
     const HLTAS::Frame frame = hltasInput.GetFrames()[row];
+    if (!frame.SaveName.empty()) {
+        if (column == 0) {
+            QString saveName = QString::fromStdString(frame.SaveName);
+            if (role == Qt::DisplayRole)
+                return QString("SAVE: %1").arg(saveName);
+            else
+                return saveName;
+        } else
+            return QString();
+    }
+
     QString outstr;
 
     switch (column) {
@@ -393,6 +406,8 @@ QFont FrameModel::getDataFont(int row, int column) const
 QBrush FrameModel::getDataBackground(int row, int column) const
 {
     const HLTAS::Frame frame = hltasInput.GetFrames()[row];
+    if (!frame.SaveName.empty())
+        return brushBlack;
 
     switch (column) {
     case IndUse:
@@ -426,6 +441,8 @@ QBrush FrameModel::getDataBackground(int row, int column) const
 QBrush FrameModel::getDataForeground(int row, int column) const
 {
     const HLTAS::Frame frame = hltasInput.GetFrames()[row];
+    if (!frame.SaveName.empty())
+        return brushWhite;
 
     switch (column) {
     case IndStrafeInfo:
@@ -473,7 +490,9 @@ bool FrameModel::openProject(const QString &fileName)
 bool FrameModel::saveProject(const QString &fileName)
 {
     // FIXME: Temporary solution
-    hltasInput.Save(fileName.toStdString());
+    auto ret = hltasInput.Save(fileName.toStdString());
+    if (ret.get().Code != HLTAS::OK)
+        qDebug() << ret.get().Code;
     return true;
 }
 
@@ -535,4 +554,10 @@ void FrameModel::toggleLgagstFullM(int row)
     frame.SetLgagstFullMaxspeed(!frame.GetLgagstFullMaxspeed());
     QModelIndex ind = index(row, IndLgagst);
     emit dataChanged(ind, ind);
+}
+
+bool FrameModel::isSaveLine(int row) const
+{
+    const HLTAS::Frame frame = hltasInput.GetFrames()[row];
+    return !frame.SaveName.empty();
 }
