@@ -15,6 +15,7 @@
 #include "numrepdelegate.hpp"
 #include "ftdelegate.hpp"
 #include "yawdelegate.hpp"
+#include "autofdelegate.hpp"
 
 class RMainWindow : public QMainWindow
 {

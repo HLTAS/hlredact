@@ -6,6 +6,7 @@ LIBS += -lboost_system -lboost_thread
 
 HEADERS += \
     libhltas/src/hltas.hpp \
+    src/autofdelegate.hpp \
     src/common.hpp \
     src/framemodel.hpp \
     src/frameview.hpp \
@@ -18,6 +19,7 @@ HEADERS += \
 
 SOURCES += \
     libhltas/src/hltas.cpp \
+    src/autofdelegate.cpp \
     src/framemodel.cpp \
     src/frameview.cpp \
     src/ftdelegate.cpp \

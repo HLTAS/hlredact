@@ -18,6 +18,14 @@ RMainWindow::RMainWindow()
     tableView->setItemDelegateForColumn(IndNumRepeat, numRepDelegate);
     StrafeDelegate *strafeDelegate = new StrafeDelegate(tableView);
     tableView->setItemDelegateForColumn(IndStrafeInfo, strafeDelegate);
+    AutofuncsDelegate *autofDelegate = new AutofuncsDelegate(tableView);
+    tableView->setItemDelegateForColumn(IndAutoJump, autofDelegate);
+    tableView->setItemDelegateForColumn(IndDuckTap, autofDelegate);
+    tableView->setItemDelegateForColumn(IndLgagst, autofDelegate);
+    tableView->setItemDelegateForColumn(IndJumpBug, autofDelegate);
+    tableView->setItemDelegateForColumn(IndDB4C, autofDelegate);
+    tableView->setItemDelegateForColumn(IndDB4G, autofDelegate);
+    tableView->setItemDelegateForColumn(IndDWJ, autofDelegate);
     YawDelegate *yawDelegate = new YawDelegate(tableView);
     tableView->setItemDelegateForColumn(IndYaw, yawDelegate);
     FTDelegate *ftDelegate = new FTDelegate(tableView);

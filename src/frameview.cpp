@@ -150,7 +150,8 @@ void FrameView::keyPressEvent(QKeyEvent *event)
                 col == IndJumpBug || col == IndDB4C || col == IndDB4G ||
                 col == IndDWJ) {
                 QModelIndex targetIndex = getIndexByColumn(col);
-                model()->setData(targetIndex, 0);
+                model()->setData(
+                    targetIndex, std::numeric_limits<unsigned int>::max());
                 return;
             }
         }

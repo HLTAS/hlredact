@@ -118,43 +118,43 @@ bool FrameModel::setData(const QModelIndex &index, const QVariant &value,
         break;
     }
     case IndAutoJump:
-        if (!value.toUInt())
+        if (value.toUInt() == std::numeric_limits<unsigned int>::max())
             frame.Autojump = false;
         else
             frame.SetAutojumpTimes(value.toUInt());
         break;
     case IndDuckTap:
-        if (!value.toUInt())
+        if (value.toUInt() == std::numeric_limits<unsigned int>::max())
             frame.Ducktap = false;
         else
             frame.SetDucktapTimes(value.toUInt());
         break;
     case IndLgagst:
-        if (!value.toUInt())
+        if (value.toUInt() == std::numeric_limits<unsigned int>::max())
             frame.Lgagst = false;
         else
             frame.SetLgagstTimes(value.toUInt());
         break;
     case IndJumpBug:
-        if (!value.toUInt())
+        if (value.toUInt() == std::numeric_limits<unsigned int>::max())
             frame.Jumpbug = false;
         else
             frame.SetJumpbugTimes(value.toUInt());
         break;
     case IndDB4C:
-        if (!value.toUInt())
+        if (value.toUInt() == std::numeric_limits<unsigned int>::max())
             frame.Dbc = false;
         else
             frame.SetDbcTimes(value.toUInt());
         break;
     case IndDB4G:
-        if (!value.toUInt())
+        if (value.toUInt() == std::numeric_limits<unsigned int>::max())
             frame.Dbg = false;
         else
             frame.SetDbgTimes(value.toUInt());
         break;
     case IndDWJ:
-        if (!value.toUInt())
+        if (value.toUInt() == std::numeric_limits<unsigned int>::max())
             frame.Dwj = false;
         else
             frame.SetDwjTimes(value.toUInt());
