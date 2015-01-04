@@ -6,6 +6,7 @@
 #include <QGuiApplication>
 #include <QLineEdit>
 #include <QKeyEvent>
+#include "framemodel.hpp"
 
 class NumRepDelegate : public QStyledItemDelegate
 {
@@ -19,6 +20,8 @@ public:
 
 private:
     void stepBy(QLineEdit *editor, int count) const;
+    bool handleNumRep(QObject *editor, QEvent *event);
+    bool handleSaveEdit(QObject *editor, QEvent *event);
 };
 
 #endif

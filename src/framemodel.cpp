@@ -76,6 +76,10 @@ bool FrameModel::setData(const QModelIndex &index, const QVariant &value,
         return false;
 
     HLTAS::Frame &frame = hltasInput.GetFrame(index.row());
+    if (!frame.SaveName.empty()) {
+        frame.SaveName = value.toString().toStdString();
+        return true;
+    }
 
     switch (index.column()) {
     case IndNumRepeat:

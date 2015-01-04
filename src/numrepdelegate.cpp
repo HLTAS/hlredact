@@ -11,19 +11,45 @@ NumRepDelegate::NumRepDelegate(QObject *parent)
 
 QWidget *NumRepDelegate::createEditor(QWidget *parent,
                                       const QStyleOptionViewItem &,
-                                      const QModelIndex &) const
+                                      const QModelIndex &index) const
 {
     QLineEdit *lineEdit = new QLineEdit(parent);
-    // int instead of unsigned int because QIntValidator only accepts int.
-    QIntValidator *validator = new QIntValidator(
-        1, std::numeric_limits<int>::max(), parent);
-    lineEdit->setValidator(validator);
-    lineEdit->setAlignment(Qt::AlignRight);
     lineEdit->setFrame(false);
+    if (((FrameModel *)index.model())->isSaveLine(index.row())) {
+        lineEdit->setProperty("saveedit", true);
+        lineEdit->setAlignment(Qt::AlignLeft);
+    } else {
+        lineEdit->setProperty("saveedit", false);
+        // int instead of unsigned int because QIntValidator only accepts int.
+        QIntValidator *validator = new QIntValidator(
+            1, std::numeric_limits<int>::max(), parent);
+        lineEdit->setValidator(validator);
+        lineEdit->setAlignment(Qt::AlignRight);
+    }
     return lineEdit;
 }
 
 bool NumRepDelegate::eventFilter(QObject *editor, QEvent *event)
+{
+    if (editor->property("saveedit").toBool())
+        return handleSaveEdit(editor, event);
+    else
+        return handleNumRep(editor, event);
+}
+
+void NumRepDelegate::stepBy(QLineEdit *editor, int count) const
+{
+    int val = editor->text().toInt();
+    if (count > 0 && std::numeric_limits<int>::max() - val < count)
+        val = std::numeric_limits<int>::max();
+    else if (count < 0 && val <= std::abs(count))
+        val = 1;
+    else
+        val += count;
+    editor->setText(QString::number(val));
+}
+
+bool NumRepDelegate::handleNumRep(QObject *editor, QEvent *event)
 {
     QLineEdit *lineEdit = (QLineEdit *)editor;
 
@@ -85,14 +111,16 @@ bool NumRepDelegate::eventFilter(QObject *editor, QEvent *event)
     return QStyledItemDelegate::eventFilter(editor, event);
 }
 
-void NumRepDelegate::stepBy(QLineEdit *editor, int count) const
+bool NumRepDelegate::handleSaveEdit(QObject *editor, QEvent *event)
 {
-    int val = editor->text().toInt();
-    if (count > 0 && std::numeric_limits<int>::max() - val < count)
-        val = std::numeric_limits<int>::max();
-    else if (count < 0 && val <= std::abs(count))
-        val = 1;
-    else
-        val += count;
-    editor->setText(QString::number(val));
+    QLineEdit *lineEdit = (QLineEdit *)editor;
+
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *keyEvent = (QKeyEvent *)event;
+        if (keyEvent->modifiers() == Qt::NoModifier)
+            if (keyEvent->key() == Qt::Key_Space)
+                return true;
+    }
+
+    return QStyledItemDelegate::eventFilter(editor, event);
 }

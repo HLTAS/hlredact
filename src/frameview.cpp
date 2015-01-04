@@ -26,6 +26,22 @@ FrameView::FrameView(QWidget *parent = nullptr)
 
 void FrameView::keyPressEvent(QKeyEvent *event)
 {
+    if (!currentIndex().isValid()) {
+        QTableView::keyPressEvent(event);
+        return;
+    }
+
+    // Handle save line separately.
+    if (((FrameModel *)model())->isSaveLine(currentIndex().row())) {
+        if (event->key() == Qt::Key_S && event->modifiers() == Qt::NoModifier) {
+            edit(getIndexByColumn(0));
+            return;
+        }
+
+        QTableView::keyPressEvent(event);
+        return;
+    }
+
     switch (event->key()) {
     case Qt::Key_A:
         if (event->modifiers() == Qt::NoModifier) {
