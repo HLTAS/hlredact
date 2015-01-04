@@ -118,25 +118,46 @@ bool FrameModel::setData(const QModelIndex &index, const QVariant &value,
         break;
     }
     case IndAutoJump:
-        frame.SetAutojumpTimes(value.toUInt());
+        if (!value.toUInt())
+            frame.Autojump = false;
+        else
+            frame.SetAutojumpTimes(value.toUInt());
         break;
     case IndDuckTap:
-        frame.SetDucktapTimes(value.toUInt());
+        if (!value.toUInt())
+            frame.Ducktap = false;
+        else
+            frame.SetDucktapTimes(value.toUInt());
         break;
     case IndLgagst:
-        frame.SetLgagstTimes(value.toUInt());
+        if (!value.toUInt())
+            frame.Lgagst = false;
+        else
+            frame.SetLgagstTimes(value.toUInt());
         break;
     case IndJumpBug:
-        frame.SetJumpbugTimes(value.toUInt());
+        if (!value.toUInt())
+            frame.Jumpbug = false;
+        else
+            frame.SetJumpbugTimes(value.toUInt());
         break;
     case IndDB4C:
-        frame.SetDbcTimes(value.toUInt());
+        if (!value.toUInt())
+            frame.Dbc = false;
+        else
+            frame.SetDbcTimes(value.toUInt());
         break;
     case IndDB4G:
-        frame.SetDbgTimes(value.toUInt());
+        if (!value.toUInt())
+            frame.Dbg = false;
+        else
+            frame.SetDbgTimes(value.toUInt());
         break;
     case IndDWJ:
-        frame.SetDwjTimes(value.toUInt());
+        if (!value.toUInt())
+            frame.Dwj = false;
+        else
+            frame.SetDwjTimes(value.toUInt());
         break;
     case IndYaw:
         if (frame.Strafe && frame.GetDir() == HLTAS::POINT) {

@@ -142,6 +142,19 @@ void FrameView::keyPressEvent(QKeyEvent *event)
         else if (currentIndex().column() == IndLgagst)
             ((FrameModel *)model())->toggleLgagstFullM(currentIndex().row());
         break;
+
+    case Qt::Key_Backspace:
+        if (event->modifiers() == Qt::NoModifier) {
+            int col = currentIndex().column();
+            if (col == IndAutoJump || col == IndDuckTap || col == IndLgagst ||
+                col == IndJumpBug || col == IndDB4C || col == IndDB4G ||
+                col == IndDWJ) {
+                QModelIndex targetIndex = getIndexByColumn(col);
+                model()->setData(targetIndex, 0);
+                return;
+            }
+        }
+        break;
     }
 
     QTableView::keyPressEvent(event);
