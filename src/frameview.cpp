@@ -32,6 +32,11 @@ void FrameView::keyPressEvent(QKeyEvent *event)
         return;
     }
 
+    if (event->key() == Qt::Key_Delete && event->modifiers() == Qt::NoModifier) {
+        ((FrameModel *)model())->removeRow(currentIndex().row());
+        return;
+    }
+
     // Handle save line separately.
     if (((FrameModel *)model())->isSaveLine(currentIndex().row())) {
         if (event->key() == Qt::Key_S && event->modifiers() == Qt::NoModifier) {
@@ -130,11 +135,6 @@ void FrameView::keyPressEvent(QKeyEvent *event)
             return;
         }
         break;
-
-    case Qt::Key_Delete:
-        if (event->modifiers() == Qt::NoModifier)
-            ((FrameModel *)model())->removeRow(currentIndex().row());
-        return;
 
     case Qt::Key_AsciiCircum:
         if (currentIndex().column() == IndDB4C)
