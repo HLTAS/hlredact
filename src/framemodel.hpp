@@ -28,15 +28,18 @@ public:
     void insertEmptyRow(int row);
     void insertSave(int row);
     bool openProject(const QString &fileName);
-    bool saveProject(const QString &fileName);
+    bool saveProject(const QString &fileName = QString());
 
     void toggleDB4CCeil(int row);
     void toggleLgagstFullM(int row);
 
     bool isSaveLine(int row) const;
 
+    QString fileName() const;
+
 private:
     HLTAS::Input hltasInput;
+    QString scriptFileName;
     QVector<unsigned int> cumulativeFrameNums;
     QFont boldFont;
     QFont italicFont;

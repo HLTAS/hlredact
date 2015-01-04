@@ -33,9 +33,12 @@ private slots:
     void save();
     void saveAs();
     void saveACopy();
+    void switchBuffer();
 
 private:
-    QString mainFileName;
+    QAction *actSwitchBuffer;
+
+    QString getCurrentBufName() const;
 };
 
 #endif

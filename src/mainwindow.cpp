@@ -63,7 +63,10 @@ RMainWindow::RMainWindow()
     menuEdit->addAction("&Preferences...");
 
     QMenu *menuView = menuBar()->addMenu("&View");
-    menuView->addAction("Show");
+    actSwitchBuffer = menuView->addAction(
+        "&Switch to work buffer", this, SLOT(switchBuffer()),
+        QKeySequence("F2")
+        );
 
     QMenu *menuHelp = menuBar()->addMenu("&Help");
     menuHelp->addAction("&About...", this, SLOT(showAbout()));
@@ -80,16 +83,13 @@ void RMainWindow::openProject()
     if (fileName.isEmpty())
         return;
 
-    if (!mainFrameModel->openProject(fileName))
+    if (!((FrameModel *)tableView->model())->openProject(fileName))
         return;
 
     tableView->resizeColumnsToContents();
-    mainFileName = fileName;
-
-    QFileInfo fileInfo(fileName);
     setWindowTitle(QString("%1 (%2)")
-                   .arg(windowTitle())
-                   .arg(fileInfo.fileName()));
+                   .arg(APP_NAME)
+                   .arg(getCurrentBufName()));
 }
 
 void RMainWindow::showAbout()
@@ -103,7 +103,7 @@ void RMainWindow::showAbout()
 
 void RMainWindow::save()
 {
-    mainFrameModel->saveProject(mainFileName);
+    ((FrameModel *)tableView->model())->saveProject();
 }
 
 void RMainWindow::saveAs()
@@ -120,5 +120,25 @@ void RMainWindow::saveACopy()
     if (fileName.isEmpty())
         return;
 
-    mainFrameModel->saveProject(fileName);
+    ((FrameModel *)tableView->model())->saveProject(fileName);
+}
+
+void RMainWindow::switchBuffer()
+{
+    if (tableView->model() == mainFrameModel) {
+        tableView->setModel(workFrameModel);
+        actSwitchBuffer->setText("&Switch to main buffer");
+    } else {
+        tableView->setModel(mainFrameModel);
+        actSwitchBuffer->setText("&Switch to work buffer");
+    }
+    setWindowTitle(QString("%1 (%2)")
+                   .arg(APP_NAME)
+                   .arg(getCurrentBufName()));
+}
+
+QString RMainWindow::getCurrentBufName() const
+{
+    QFileInfo fileInfo(((FrameModel *)tableView->model())->fileName());
+    return fileInfo.fileName();
 }

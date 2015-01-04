@@ -498,26 +498,28 @@ bool FrameModel::openProject(const QString &fileName)
 
     // FIXME: Temporary solution for testing purposes.
 
-    if (ret.get().Code != HLTAS::OK) {
-        qDebug() << ret.get().Code;
-        return false;
-    }
+    HLTAS::ErrorDescription error = ret.get();
+    if (error.Code != HLTAS::OK)
+        qDebug() << error.Code;
 
     const std::vector<HLTAS::Frame> &frames = hltasInput.GetFrames();
     beginInsertRows(QModelIndex(), 0, frames.size() - 1);
     endInsertRows();
     updateCumulativeFrameNums();
     emit dataChanged(index(0, 0), index(frames.size() - 1, IndLength));
+    scriptFileName = fileName;
 
     return true;
 }
 
 bool FrameModel::saveProject(const QString &fileName)
 {
+    QString name = fileName == QString() ? scriptFileName : fileName;
     // FIXME: Temporary solution
-    auto ret = hltasInput.Save(fileName.toStdString());
-    if (ret.get().Code != HLTAS::OK)
-        qDebug() << ret.get().Code;
+    auto ret = hltasInput.Save(name.toStdString());
+    HLTAS::ErrorDescription error = ret.get();
+    if (error.Code != HLTAS::OK)
+        qDebug() << error.Code;
     return true;
 }
 
@@ -599,4 +601,9 @@ bool FrameModel::isSaveLine(int row) const
 {
     const HLTAS::Frame frame = hltasInput.GetFrames()[row];
     return !frame.SaveName.empty();
+}
+
+QString FrameModel::fileName() const
+{
+    return scriptFileName;
 }
