@@ -51,6 +51,7 @@ private slots:
     void toggleMoveRight();
     void toggleMoveUp();
     void toggleMoveDown();
+    void addSegment();
 };
 
 #endif

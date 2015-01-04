@@ -9,6 +9,7 @@ FrameView::FrameView(QWidget *parent = nullptr)
     // We will implement our own heavily customised triggers.
     setEditTriggers(QAbstractItemView::NoEditTriggers);
 
+    new QShortcut(QKeySequence("Ctrl+Shift+S"), this, SLOT(addSegment()));
     new QShortcut(QKeySequence("Ctrl+M"), this, SLOT(editCmds()));
     new QShortcut(QKeySequence("Ctrl+U"), this, SLOT(toggleUse()));
     new QShortcut(QKeySequence("Ctrl+D"), this, SLOT(toggleDuck()));
@@ -234,4 +235,9 @@ void FrameView::dataChanged(const QModelIndex &topLeft,
             setSpan(i, 0, 1, IndLength);
     }
     QTableView::dataChanged(topLeft, bottomRight, roles);
+}
+
+void FrameView::addSegment()
+{
+    ((FrameModel *)model())->insertSave(currentIndex().row());
 }

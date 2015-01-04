@@ -520,6 +520,7 @@ void FrameModel::insertDuplicateRow(int row)
     hltasInput.InsertFrame(row, frame);
     endInsertRows();
     updateCumulativeFrameNums();
+    emit dataChanged(index(row, 0), index(row + 1, IndLength));
 }
 
 void FrameModel::insertEmptyRow(int row)
@@ -532,6 +533,19 @@ void FrameModel::insertEmptyRow(int row)
     insertRow(row);
     endInsertRows();
     updateCumulativeFrameNums();
+    emit dataChanged(index(row, 0), index(row + 1, IndLength));
+}
+
+void FrameModel::insertSave(int row)
+{
+    beginInsertRows(QModelIndex(), row, row);
+    HLTAS::Frame frame = {};
+    // FIXME: temporary name
+    frame.SaveName = "nextseg";
+    hltasInput.InsertFrame(row, frame);
+    endInsertRows();
+    updateCumulativeFrameNums();
+    emit dataChanged(index(row, 0), index(row + 1, IndLength));
 }
 
 bool FrameModel::removeRows(int row, int count, const QModelIndex &parent)

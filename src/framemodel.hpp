@@ -26,6 +26,7 @@ public:
 
     void insertDuplicateRow(int row);
     void insertEmptyRow(int row);
+    void insertSave(int row);
     bool openProject(const QString &fileName);
     bool saveProject(const QString &fileName);
 
