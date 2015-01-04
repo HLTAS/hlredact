@@ -243,15 +243,28 @@ void FrameView::dataChanged(const QModelIndex &topLeft,
                             const QModelIndex &bottomRight,
                             const QVector<int> &roles)
 {
-    const FrameModel *frameModel = (FrameModel *)model();
-    for (int i = topLeft.row(); i <= bottomRight.row(); i++) {
-        if (frameModel->isSaveLine(i))
-            setSpan(i, 0, 1, IndLength);
-    }
     QTableView::dataChanged(topLeft, bottomRight, roles);
+    updateSaveColumns(topLeft.row(), bottomRight.row());
 }
 
 void FrameView::addSegment()
 {
     ((FrameModel *)model())->insertSave(currentIndex().row());
+}
+
+void FrameView::setModel(QAbstractItemModel *model)
+{
+    QTableView::setModel(model);
+    updateSaveColumns(0, model->rowCount() - 1);
+}
+
+void FrameView::updateSaveColumns(int startRow, int endRow)
+{
+    const FrameModel *frameModel = (FrameModel *)model();
+    for (int i = startRow; i <= endRow; i++) {
+        if (frameModel->isSaveLine(i))
+            setSpan(i, 0, 1, IndLength);
+        else if (columnSpan(i, 0) != 1)
+            setSpan(i, 0, 1, 1);
+    }
 }

@@ -16,6 +16,7 @@ class FrameView : public QTableView
 
 public:
     FrameView(QWidget *parent);
+    void setModel(QAbstractItemModel *model);
 
 private:
     enum EditMode
@@ -28,14 +29,13 @@ private:
     QString keyInputBuffer;
 
     void toggleButton(int column);
+    QModelIndex getIndexByColumn(int column) const;
+    void updateSaveColumns(int startRow, int endRow);
 
 protected:
     void keyPressEvent(QKeyEvent *event);
     void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight,
                      const QVector<int> &roles = QVector<int>());
-
-private:
-    QModelIndex getIndexByColumn(int column) const;
 
 private slots:
     void editCmds();
