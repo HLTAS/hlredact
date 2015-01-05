@@ -29,3 +29,6 @@ add_executable (hlredact
 	src/toggledelegate.cpp
 	src/yawdelegate.cpp)
 target_link_libraries (hlredact hltas Qt5::Widgets ${Boost_LIBRARIES})
+if (NOT MSVC)
+	target_link_libraries (hlredact pthread)
+endif ()
