@@ -93,25 +93,25 @@ bool FrameModel::setData(const QModelIndex &index, const QVariant &value,
             frame.Strafe = false;
             break;
         } else if (input[0] == 'A')
-            frame.SetType(HLTAS::MAXACCEL);
+            frame.SetType(HLTAS::StrafeType::MAXACCEL);
         else if (input[0] == 'D')
-            frame.SetType(HLTAS::MAXDECCEL);
+            frame.SetType(HLTAS::StrafeType::MAXDECCEL);
         else if (input[0] == 'C')
-            frame.SetType(HLTAS::CONSTSPEED);
+            frame.SetType(HLTAS::StrafeType::CONSTSPEED);
         else if (input[0] == 'G')
-            frame.SetType(HLTAS::MAXANGLE);
+            frame.SetType(HLTAS::StrafeType::MAXANGLE);
 
         if (input[1] == 'N')
-            frame.SetDir(HLTAS::LINE);
+            frame.SetDir(HLTAS::StrafeDir::LINE);
         else if (input[1] == 'Y')
-            frame.SetDir(HLTAS::YAW);
+            frame.SetDir(HLTAS::StrafeDir::YAW);
         else if (input[1] == 'P')
-            frame.SetDir(HLTAS::POINT);
+            frame.SetDir(HLTAS::StrafeDir::POINT);
         else if (input[1] == 'L') {
-            frame.SetDir(HLTAS::LEFT);
+            frame.SetDir(HLTAS::StrafeDir::LEFT);
             frame.SetYawPresent(false);
         } else if (input[1] == 'R') {
-            frame.SetDir(HLTAS::RIGHT);
+            frame.SetDir(HLTAS::StrafeDir::RIGHT);
             frame.SetYawPresent(false);
         }
 
@@ -160,7 +160,7 @@ bool FrameModel::setData(const QModelIndex &index, const QVariant &value,
             frame.SetDwjTimes(value.toUInt());
         break;
     case IndYaw:
-        if (frame.Strafe && frame.GetDir() == HLTAS::POINT) {
+        if (frame.Strafe && frame.GetDir() == HLTAS::StrafeDir::POINT) {
             QPointF point = value.toPointF();
             frame.SetX(point.x());
             frame.SetY(point.y());
@@ -275,24 +275,24 @@ QString FrameModel::getDataText(int row, int column, int role) const
         if (!frame.Strafe)
             break;
 
-        if (frame.GetType() == HLTAS::MAXACCEL)
+        if (frame.GetType() == HLTAS::StrafeType::MAXACCEL)
             outstr = 'A';
-        else if (frame.GetType() == HLTAS::MAXDECCEL)
+        else if (frame.GetType() == HLTAS::StrafeType::MAXDECCEL)
             outstr = 'D';
-        else if (frame.GetType() == HLTAS::MAXANGLE)
+        else if (frame.GetType() == HLTAS::StrafeType::MAXANGLE)
             outstr = 'G';
-        else if (frame.GetType() == HLTAS::CONSTSPEED)
+        else if (frame.GetType() == HLTAS::StrafeType::CONSTSPEED)
             outstr = 'C';
 
-        if (frame.GetDir() == HLTAS::LEFT)
+        if (frame.GetDir() == HLTAS::StrafeDir::LEFT)
             outstr += 'L';
-        else if (frame.GetDir() == HLTAS::RIGHT)
+        else if (frame.GetDir() == HLTAS::StrafeDir::RIGHT)
             outstr += 'R';
-        else if (frame.GetDir() == HLTAS::YAW)
+        else if (frame.GetDir() == HLTAS::StrafeDir::YAW)
             outstr += 'Y';
-        else if (frame.GetDir() == HLTAS::POINT)
+        else if (frame.GetDir() == HLTAS::StrafeDir::POINT)
             outstr += 'P';
-        else if (frame.GetDir() == HLTAS::LINE)
+        else if (frame.GetDir() == HLTAS::StrafeDir::LINE)
             outstr += 'N';
 
         break;
@@ -331,15 +331,16 @@ QString FrameModel::getDataText(int row, int column, int role) const
             break;
         }
 
-        if (frame.GetDir() == HLTAS::LEFT || frame.GetDir() == HLTAS::RIGHT)
+        if (frame.GetDir() == HLTAS::StrafeDir::LEFT ||
+            frame.GetDir() == HLTAS::StrafeDir::RIGHT)
             outstr = "NA";
-        else if (frame.GetDir() == HLTAS::POINT) {
+        else if (frame.GetDir() == HLTAS::StrafeDir::POINT) {
             if (frame.GetYawPresent())
                 outstr = QString("(%1 %2)").arg(frame.GetX()).arg(frame.GetY());
             else
                 outstr = "Pending";
-        } else if (frame.GetDir() == HLTAS::LINE ||
-                   frame.GetDir() == HLTAS::YAW) {
+        } else if (frame.GetDir() == HLTAS::StrafeDir::LINE ||
+                   frame.GetDir() == HLTAS::StrafeDir::YAW) {
             if (frame.GetYawPresent())
                 outstr.setNum(frame.GetYaw());
             else
@@ -405,8 +406,8 @@ QFont FrameModel::getDataFont(int row, int column) const
 
     switch (column) {
     case IndYaw:
-        if (frame.Strafe && (frame.GetDir() == HLTAS::LEFT ||
-                             frame.GetDir() == HLTAS::RIGHT))
+        if (frame.Strafe && (frame.GetDir() == HLTAS::StrafeDir::LEFT ||
+                             frame.GetDir() == HLTAS::StrafeDir::RIGHT))
             return italicFont;
         break;
     case IndAutoJump:
@@ -482,7 +483,8 @@ QBrush FrameModel::getDataForeground(int row, int column) const
     case IndYaw:
         if (!frame.Strafe)
             break;
-        if (frame.GetDir() == HLTAS::LEFT || frame.GetDir() == HLTAS::RIGHT)
+        if (frame.GetDir() == HLTAS::StrafeDir::LEFT ||
+            frame.GetDir() == HLTAS::StrafeDir::RIGHT)
             break;
         if (frame.GetYawPresent())
             break;
@@ -498,8 +500,8 @@ bool FrameModel::openProject(const QString &fileName)
     // FIXME: Temporary solution for testing purposes.
 
     HLTAS::ErrorDescription error = ret.get();
-    if (error.Code != HLTAS::OK)
-        qDebug() << error.Code;
+    if (error.Code != HLTAS::ErrorCode::OK)
+        qDebug() << (int)error.Code;
 
     const std::vector<HLTAS::Frame> &frames = hltasInput.GetFrames();
     beginInsertRows(QModelIndex(), 0, frames.size() - 1);
@@ -517,8 +519,8 @@ bool FrameModel::saveProject(const QString &fileName)
     // FIXME: Temporary solution
     auto ret = hltasInput.Save(name.toStdString());
     HLTAS::ErrorDescription error = ret.get();
-    if (error.Code != HLTAS::OK)
-        qDebug() << error.Code;
+    if (error.Code != HLTAS::ErrorCode::OK)
+        qDebug() << (int)error.Code;
     return true;
 }
 
