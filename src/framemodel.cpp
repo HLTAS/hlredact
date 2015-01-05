@@ -391,8 +391,7 @@ QString FrameModel::getDataText(int row, int column, int role) const
 
 Qt::ItemFlags FrameModel::flags(const QModelIndex &index) const
 {
-    return (QAbstractTableModel::flags(index) | Qt::ItemIsEditable) &
-        ~Qt::ItemIsSelectable;
+    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
 }
 
 QModelIndex FrameModel::index(int row, int column, const QModelIndex &) const
