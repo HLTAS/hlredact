@@ -57,7 +57,7 @@ RMainWindow::RMainWindow()
     menuFile->addAction("Save &As...", this, SLOT(saveAs()));
     menuFile->addAction("Save a &Copy...", this, SLOT(saveACopy()));
     menuFile->addSeparator();
-    QAction *actProperties = menuFile->addAction("&Properties...");
+    actProperties = menuFile->addAction("&Properties...");
     actProperties->setEnabled(false);
     menuFile->addSeparator();
     menuFile->addAction("&Quit");
@@ -98,6 +98,7 @@ void RMainWindow::openProject()
     setWindowTitle(QString("%1 (%2)")
                    .arg(APP_NAME)
                    .arg(getCurrentBufName()));
+    actProperties->setEnabled(true);
 }
 
 void RMainWindow::showAbout()
@@ -143,6 +144,8 @@ void RMainWindow::switchBuffer()
     setWindowTitle(QString("%1 (%2)")
                    .arg(APP_NAME)
                    .arg(getCurrentBufName()));
+    actProperties->setDisabled(
+        ((FrameModel *)tableView->model())->fileName().isEmpty());
 }
 
 QString RMainWindow::getCurrentBufName() const

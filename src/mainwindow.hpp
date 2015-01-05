@@ -38,6 +38,7 @@ private slots:
 
 private:
     QAction *actSwitchBuffer;
+    QAction *actProperties;
 
     QString getCurrentBufName() const;
 };
