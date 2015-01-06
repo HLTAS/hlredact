@@ -6,8 +6,8 @@ PitchDelegate::PitchDelegate(QObject *parent)
 }
 
 QWidget *PitchDelegate::createEditor(QWidget *parent,
-                                     const QStyleOptionViewItem &option,
-                                     const QModelIndex &index) const
+                                     const QStyleOptionViewItem &,
+                                     const QModelIndex &) const
 {
     QLineEdit *lineEdit = new QLineEdit(parent);
     lineEdit->setFrame(false);
