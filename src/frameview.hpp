@@ -7,6 +7,7 @@
 #include <QLineEdit>
 #include <QAbstractItemDelegate>
 #include <QShortcut>
+#include <QInputDialog>
 #include "common.hpp"
 #include "framemodel.hpp"
 

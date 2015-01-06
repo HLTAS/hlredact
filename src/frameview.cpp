@@ -166,6 +166,28 @@ void FrameView::keyPressEvent(QKeyEvent *event)
             }
         }
         break;
+
+    case Qt::Key_Slash:
+        if (event->modifiers() == Qt::NoModifier) {
+            FrameModel *fmodel = (FrameModel *)model();
+            QModelIndex indNumRep = getIndexByColumn(IndNumRepeat);
+            int numrep = fmodel->data(indNumRep, Qt::EditRole).toInt();
+            if (numrep <= 1)
+                return;
+            bool ok;
+            int n = QInputDialog::getInt(
+                this, "Split a framebulk", "Number of frames:",
+                1, 1, numrep - 1, 1, &ok);
+            if (!ok)
+                return;
+
+            fmodel->setData(indNumRep, numrep - n);
+            fmodel->insertDuplicateRow(currentIndex().row());
+            fmodel->setData(indNumRep, n);
+
+            return;
+        }
+        break;
     }
 
     QTableView::keyPressEvent(event);
