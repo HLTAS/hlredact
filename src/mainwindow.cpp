@@ -80,13 +80,13 @@ RMainWindow::RMainWindow()
     menuEdit->addSeparator();
     actJoinFramesToOther = menuEdit->addAction(
         txtJoinFramesToWork, this, SLOT(joinFramesToOther()),
-        QKeySequence("F3"));
+        QKeySequence("F2"));
     menuEdit->addSeparator();
     menuEdit->addAction("&Preferences...");
 
     QMenu *menuView = menuBar()->addMenu("&View");
     actSwitchBuffer = menuView->addAction(
-        txtSwitchToWorkBuf, this, SLOT(switchBuffer()), QKeySequence("F2"));
+        txtSwitchToWorkBuf, this, SLOT(switchBuffer()), QKeySequence("Alt+S"));
 
     QMenu *menuHelp = menuBar()->addMenu("&Help");
     menuHelp->addAction("&About...", this, SLOT(showAbout()));
