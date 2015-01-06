@@ -8,6 +8,7 @@
 #include <QMenu>
 #include <QFileDialog>
 #include <QMessageBox>
+#include "common.hpp"
 #include "frameview.hpp"
 #include "framemodel.hpp"
 #include "strafedelegate.hpp"
@@ -16,6 +17,7 @@
 #include "ftdelegate.hpp"
 #include "yawdelegate.hpp"
 #include "autofdelegate.hpp"
+#include "propswindow.hpp"
 
 class RMainWindow : public QMainWindow
 {
@@ -29,6 +31,7 @@ public:
     RMainWindow();
 
 private slots:
+    void openProperties();
     void openProject();
     void showAbout();
     void save();
@@ -39,6 +42,7 @@ private slots:
 private:
     QAction *actSwitchBuffer;
     QAction *actProperties;
+    PropsWindow *propsWindow;
 
     QString getCurrentBufName() const;
 };

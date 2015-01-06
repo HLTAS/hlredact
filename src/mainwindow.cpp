@@ -1,5 +1,4 @@
 #include "mainwindow.hpp"
-#include "common.hpp"
 
 RMainWindow::RMainWindow()
     : QMainWindow(nullptr)
@@ -44,6 +43,8 @@ RMainWindow::RMainWindow()
     tableView->setItemDelegateForColumn(IndMoveUp, toggleDelegate);
     tableView->setItemDelegateForColumn(IndMoveDown, toggleDelegate);
 
+    propsWindow = new PropsWindow(this);
+
     statusBar();
 
     QMenu *menuFile = menuBar()->addMenu("&File");
@@ -57,7 +58,9 @@ RMainWindow::RMainWindow()
     menuFile->addAction("Save &As...", this, SLOT(saveAs()));
     menuFile->addAction("Save a &Copy...", this, SLOT(saveACopy()));
     menuFile->addSeparator();
-    actProperties = menuFile->addAction("&Properties...");
+    actProperties = menuFile->addAction(
+        "&Properties...", this, SLOT(openProperties()),
+        QKeySequence("Ctrl+P"));
     actProperties->setEnabled(false);
     menuFile->addSeparator();
     menuFile->addAction("&Quit");
@@ -152,4 +155,9 @@ QString RMainWindow::getCurrentBufName() const
 {
     QFileInfo fileInfo(((FrameModel *)tableView->model())->fileName());
     return fileInfo.fileName();
+}
+
+void RMainWindow::openProperties()
+{
+    propsWindow->exec();
 }

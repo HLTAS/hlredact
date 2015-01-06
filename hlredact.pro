@@ -13,6 +13,7 @@ HEADERS += \
     src/ftdelegate.hpp \
     src/mainwindow.hpp \
     src/numrepdelegate.hpp \
+    src/propswindow.hpp \
     src/strafedelegate.hpp \
     src/toggledelegate.hpp \
     src/uintvalidator.hpp \
@@ -27,6 +28,7 @@ SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
     src/numrepdelegate.cpp \
+    src/propswindow.cpp \
     src/strafedelegate.cpp \
     src/toggledelegate.cpp \
     src/uintvalidator.cpp \
