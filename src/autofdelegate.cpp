@@ -10,8 +10,8 @@ QWidget *AutofuncsDelegate::createEditor(QWidget *parent,
                                          const QModelIndex &) const
 {
     QLineEdit *lineEdit = new QLineEdit(parent);
-    QIntValidator *validator = new QIntValidator(
-        0, std::numeric_limits<int>::max(), lineEdit);
+    UIntValidator *validator = new UIntValidator(
+        0, std::numeric_limits<unsigned int>::max(), lineEdit);
     lineEdit->setValidator(validator);
     lineEdit->setAlignment(Qt::AlignCenter);
     lineEdit->setFrame(false);

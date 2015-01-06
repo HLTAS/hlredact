@@ -6,6 +6,7 @@
 #include <QGuiApplication>
 #include <QLineEdit>
 #include <QKeyEvent>
+#include "uintvalidator.hpp"
 #include "framemodel.hpp"
 
 class NumRepDelegate : public QStyledItemDelegate

@@ -3,8 +3,8 @@
 
 #include <QStyledItemDelegate>
 #include <QLineEdit>
-#include <QIntValidator>
 #include <QKeyEvent>
+#include "uintvalidator.hpp"
 
 class AutofuncsDelegate : public QStyledItemDelegate
 {

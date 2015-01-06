@@ -20,9 +20,8 @@ QWidget *NumRepDelegate::createEditor(QWidget *parent,
         lineEdit->setAlignment(Qt::AlignLeft);
     } else {
         lineEdit->setProperty("saveedit", false);
-        // int instead of unsigned int because QIntValidator only accepts int.
-        QIntValidator *validator = new QIntValidator(
-            1, std::numeric_limits<int>::max(), parent);
+        UIntValidator *validator = new UIntValidator(
+            1, std::numeric_limits<unsigned int>::max(), parent);
         lineEdit->setValidator(validator);
         lineEdit->setAlignment(Qt::AlignRight);
     }
