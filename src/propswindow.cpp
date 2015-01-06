@@ -25,17 +25,17 @@ PropsWindow::PropsWindow(QWidget *parent, Qt::WindowFlags f)
     editDemo->setValidator(regExpValid);
     editSave->setValidator(regExpValid);
 
-    QLabel *lblNSSeed = new QLabel("&NS seed", this);
-    gridLay->addWidget(lblNSSeed, 2, 0);
-    QLineEdit *editNSSeed = new QLineEdit(this);
-    lblNSSeed->setBuddy(editNSSeed);
-    gridLay->addWidget(editNSSeed, 2, 1);
-
     QLabel *lblSSeed = new QLabel("S s&eed", this);
-    gridLay->addWidget(lblSSeed, 3, 0);
-    QLineEdit *editSSeed = new QLineEdit(this);
+    gridLay->addWidget(lblSSeed, 2, 0);
+    editSSeed = new QLineEdit(this);
     lblSSeed->setBuddy(editSSeed);
-    gridLay->addWidget(editSSeed, 3, 1);
+    gridLay->addWidget(editSSeed, 2, 1);
+
+    QLabel *lblNSSeed = new QLabel("&NS seed", this);
+    gridLay->addWidget(lblNSSeed, 3, 0);
+    editNSSeed = new QLineEdit(this);
+    lblNSSeed->setBuddy(editNSSeed);
+    gridLay->addWidget(editNSSeed, 3, 1);
 
     UIntValidator *uintValid = new UIntValidator(
         0, std::numeric_limits<unsigned int>::max(),
