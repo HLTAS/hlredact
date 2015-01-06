@@ -15,6 +15,7 @@ HEADERS += \
     src/numrepdelegate.hpp \
     src/strafedelegate.hpp \
     src/toggledelegate.hpp \
+    src/uintvalidator.hpp \
     src/yawdelegate.hpp \
 
 SOURCES += \
@@ -28,4 +29,5 @@ SOURCES += \
     src/numrepdelegate.cpp \
     src/strafedelegate.cpp \
     src/toggledelegate.cpp \
+    src/uintvalidator.cpp \
     src/yawdelegate.cpp \
