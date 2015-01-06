@@ -6,7 +6,7 @@ UIntValidator::UIntValidator(unsigned int minimum, unsigned int maximum,
 {
 }
 
-QValidator::State UIntValidator::validate(QString &input, int &pos) const
+QValidator::State UIntValidator::validate(QString &input, int &) const
 {
     if (input.isEmpty())
         return QValidator::Intermediate;
