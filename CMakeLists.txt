@@ -25,9 +25,13 @@ add_executable (hlredact
 	src/main.cpp
 	src/mainwindow.cpp
 	src/numrepdelegate.cpp
+	src/propswindow.cpp
 	src/strafedelegate.cpp
 	src/toggledelegate.cpp
-	src/yawdelegate.cpp)
+	src/uintvalidator.cpp
+	src/yawdelegate.cpp
+)
+
 target_link_libraries (hlredact hltas Qt5::Widgets ${Boost_LIBRARIES})
 if (NOT MSVC)
 	target_link_libraries (hlredact pthread)
