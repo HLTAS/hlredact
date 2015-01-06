@@ -27,6 +27,8 @@ RMainWindow::RMainWindow()
     tableView->setItemDelegateForColumn(IndDWJ, autofDelegate);
     YawDelegate *yawDelegate = new YawDelegate(tableView);
     tableView->setItemDelegateForColumn(IndYaw, yawDelegate);
+    PitchDelegate *pitchDelegate = new PitchDelegate(tableView);
+    tableView->setItemDelegateForColumn(IndPitch, pitchDelegate);
     FTDelegate *ftDelegate = new FTDelegate(tableView);
     tableView->setItemDelegateForColumn(IndFrameTime, ftDelegate);
     ToggleDelegate *toggleDelegate = new ToggleDelegate(tableView);

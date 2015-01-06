@@ -167,6 +167,9 @@ bool FrameModel::setData(const QModelIndex &index, const QVariant &value,
         } else
             frame.SetYaw(value.toDouble());
         break;
+    case IndPitch:
+        frame.SetPitch(value.toDouble());
+        break;
     case IndFrameTime:
         frame.Frametime = value.toString().toStdString();
         break;

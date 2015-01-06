@@ -25,6 +25,7 @@ add_executable (hlredact
 	src/main.cpp
 	src/mainwindow.cpp
 	src/numrepdelegate.cpp
+    src/pitchdelegate.cpp
 	src/propswindow.cpp
 	src/strafedelegate.cpp
 	src/toggledelegate.cpp

@@ -108,6 +108,13 @@ void FrameView::keyPressEvent(QKeyEvent *event)
         }
         break;
 
+    case Qt::Key_P:
+        if (event->modifiers() == Qt::NoModifier) {
+            edit(getIndexByColumn(IndPitch));
+            return;
+        }
+        break;
+
     case Qt::Key_R:
         if (event->modifiers() == Qt::NoModifier) {
             edit(getIndexByColumn(IndNumRepeat));

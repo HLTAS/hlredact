@@ -13,6 +13,7 @@ HEADERS += \
     src/ftdelegate.hpp \
     src/mainwindow.hpp \
     src/numrepdelegate.hpp \
+    src/pitchdelegate.hpp \
     src/propswindow.hpp \
     src/strafedelegate.hpp \
     src/toggledelegate.hpp \
@@ -28,6 +29,7 @@ SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
     src/numrepdelegate.cpp \
+    src/pitchdelegate.cpp \
     src/propswindow.cpp \
     src/strafedelegate.cpp \
     src/toggledelegate.cpp \

@@ -16,6 +16,7 @@
 #include "numrepdelegate.hpp"
 #include "ftdelegate.hpp"
 #include "yawdelegate.hpp"
+#include "pitchdelegate.hpp"
 #include "autofdelegate.hpp"
 #include "propswindow.hpp"
 
