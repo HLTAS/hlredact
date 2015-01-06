@@ -1,5 +1,8 @@
 #include "mainwindow.hpp"
 
+static const QString txtSwitchToMainBuf = "&Switch to main buffer";
+static const QString txtSwitchToWorkBuf = "&Switch to work buffer";
+
 RMainWindow::RMainWindow()
     : QMainWindow(nullptr)
 {
@@ -73,13 +76,13 @@ RMainWindow::RMainWindow()
     menuEdit->addSeparator();
     menuEdit->addAction("&Find...");
     menuEdit->addSeparator();
+    menuEdit->addAction("&Join following frames to main");
+    menuEdit->addSeparator();
     menuEdit->addAction("&Preferences...");
 
     QMenu *menuView = menuBar()->addMenu("&View");
     actSwitchBuffer = menuView->addAction(
-        "&Switch to work buffer", this, SLOT(switchBuffer()),
-        QKeySequence("F2")
-        );
+        txtSwitchToWorkBuf, this,SLOT(switchBuffer()), QKeySequence("F2"));
 
     QMenu *menuHelp = menuBar()->addMenu("&Help");
     menuHelp->addAction("&About...", this, SLOT(showAbout()));
@@ -141,10 +144,10 @@ void RMainWindow::switchBuffer()
 {
     if (tableView->model() == mainFrameModel) {
         tableView->setModel(workFrameModel);
-        actSwitchBuffer->setText("&Switch to main buffer");
+        actSwitchBuffer->setText(txtSwitchToMainBuf);
     } else {
         tableView->setModel(mainFrameModel);
-        actSwitchBuffer->setText("&Switch to work buffer");
+        actSwitchBuffer->setText(txtSwitchToWorkBuf);
     }
     setWindowTitle(QString("%1 (%2)")
                    .arg(APP_NAME)
