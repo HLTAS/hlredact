@@ -544,10 +544,10 @@ void FrameModel::insertDuplicateRow(int row)
 {
     beginInsertRows(QModelIndex(), row, row);
     HLTAS::Frame frame = hltasInput.GetFrames()[row];
-    hltasInput.InsertFrame(row, frame);
+    hltasInput.InsertFrame(row + 1, frame);
     endInsertRows();
     updateCumulativeFrameNums();
-    emit dataChanged(index(row, 0), index(row + 1, IndLength));
+    emit dataChanged(index(row + 1, 0), index(row + 1, IndLength));
 }
 
 void FrameModel::insertEmptyRow(int row)
@@ -556,11 +556,11 @@ void FrameModel::insertEmptyRow(int row)
     HLTAS::Frame frame = {};
     frame.SetRepeats(1);
     frame.Frametime = "-";
-    hltasInput.InsertFrame(row, frame);
+    hltasInput.InsertFrame(row + 1, frame);
     insertRow(row);
     endInsertRows();
     updateCumulativeFrameNums();
-    emit dataChanged(index(row, 0), index(row + 1, IndLength));
+    emit dataChanged(index(row + 1, 0), index(row + 1, IndLength));
 }
 
 void FrameModel::insertSave(int row)
