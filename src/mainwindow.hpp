@@ -39,8 +39,10 @@ private slots:
     void saveAs();
     void saveACopy();
     void switchBuffer();
+    void joinFramesToOther();
 
 private:
+    QAction *actJoinFramesToOther;
     QAction *actSwitchBuffer;
     QAction *actProperties;
     PropsWindow *propsWindow;

@@ -540,6 +540,19 @@ void FrameModel::updateCumulativeFrameNums()
     emit headerDataChanged(Qt::Vertical, 0, frames.size() - 1);
 }
 
+void FrameModel::insertFramesFromOther(int row, int count,
+                                       const FrameModel &model)
+{
+    QModelIndex startInd = index(rowCount(), 0);
+    const std::vector<HLTAS::Frame> &frames = model.hltasInput.GetFrames();
+    beginInsertRows(QModelIndex(), row, row + count - 1);
+    for (int i = row; i < row + count; i++)
+        hltasInput.InsertFrame(rowCount(), frames[i]);
+    endInsertRows();
+    updateCumulativeFrameNums();
+    emit dataChanged(startInd, index(rowCount() - 1, IndLength));
+}
+
 void FrameModel::insertDuplicateRow(int row)
 {
     beginInsertRows(QModelIndex(), row, row);

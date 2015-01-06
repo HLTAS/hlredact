@@ -2,6 +2,8 @@
 
 static const QString txtSwitchToMainBuf = "&Switch to main buffer";
 static const QString txtSwitchToWorkBuf = "&Switch to work buffer";
+static const QString txtJoinFramesToMain = "&Join following frames to main";
+static const QString txtJoinFramesToWork = "&Join following frames to work";
 
 RMainWindow::RMainWindow()
     : QMainWindow(nullptr)
@@ -76,13 +78,15 @@ RMainWindow::RMainWindow()
     menuEdit->addSeparator();
     menuEdit->addAction("&Find...");
     menuEdit->addSeparator();
-    menuEdit->addAction("&Join following frames to main");
+    actJoinFramesToOther = menuEdit->addAction(
+        txtJoinFramesToWork, this, SLOT(joinFramesToOther()),
+        QKeySequence("F3"));
     menuEdit->addSeparator();
     menuEdit->addAction("&Preferences...");
 
     QMenu *menuView = menuBar()->addMenu("&View");
     actSwitchBuffer = menuView->addAction(
-        txtSwitchToWorkBuf, this,SLOT(switchBuffer()), QKeySequence("F2"));
+        txtSwitchToWorkBuf, this, SLOT(switchBuffer()), QKeySequence("F2"));
 
     QMenu *menuHelp = menuBar()->addMenu("&Help");
     menuHelp->addAction("&About...", this, SLOT(showAbout()));
@@ -144,9 +148,11 @@ void RMainWindow::switchBuffer()
 {
     if (tableView->model() == mainFrameModel) {
         tableView->setModel(workFrameModel);
+        actJoinFramesToOther->setText(txtJoinFramesToMain);
         actSwitchBuffer->setText(txtSwitchToMainBuf);
     } else {
         tableView->setModel(mainFrameModel);
+        actJoinFramesToOther->setText(txtJoinFramesToWork);
         actSwitchBuffer->setText(txtSwitchToWorkBuf);
     }
     setWindowTitle(QString("%1 (%2)")
@@ -181,4 +187,17 @@ void RMainWindow::openProperties()
     model->setDemoName(propsWindow->demoName());
     model->setSaveName(propsWindow->saveName());
     model->setSeeds(propsWindow->SSeed(), propsWindow->NSSeed());
+}
+
+void RMainWindow::joinFramesToOther()
+{
+    FrameModel *curModel = (FrameModel *)tableView->model();
+    FrameModel *otherModel = curModel == mainFrameModel ?
+        workFrameModel : mainFrameModel;
+
+    QModelIndex curInd = tableView->currentIndex();
+    int rowCount = curModel->rowCount();
+    otherModel->insertFramesFromOther(curInd.row(), rowCount - curInd.row(),
+                                      *curModel);
+    curModel->removeRows(curInd.row(), rowCount - curInd.row());
 }

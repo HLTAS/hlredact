@@ -24,6 +24,7 @@ public:
     bool removeRows(int row, int count,
                     const QModelIndex &parent = QModelIndex());
 
+    void insertFramesFromOther(int row, int count, const FrameModel &model);
     void insertDuplicateRow(int row);
     void insertEmptyRow(int row);
     void insertSave(int row);
