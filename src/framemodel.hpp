@@ -37,6 +37,14 @@ public:
 
     QString fileName() const;
 
+    QString demoName() const;
+    QString saveName() const;
+    bool seeds(unsigned int &SSeed, unsigned int &NSSeed) const;
+
+    void setDemoName(const QString &name);
+    void setSaveName(const QString &name);
+    void setSeeds(unsigned int SSeed, unsigned int NSSeed);
+
 private:
     HLTAS::Input hltasInput;
     QString scriptFileName;

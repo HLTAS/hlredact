@@ -159,5 +159,21 @@ QString RMainWindow::getCurrentBufName() const
 
 void RMainWindow::openProperties()
 {
-    propsWindow->exec();
+    FrameModel *model = (FrameModel *)tableView->model();
+    propsWindow->setDemoName(model->demoName());
+    propsWindow->setSaveName(model->saveName());
+    unsigned int SSeed;
+    unsigned int NSSeed;
+    if (model->seeds(SSeed, NSSeed)) {
+        propsWindow->setSSeed(SSeed);
+        propsWindow->setNSSeed(NSSeed);
+    } else
+        propsWindow->clearSeeds();
+
+    if (!propsWindow->exec())
+        return;
+
+    model->setDemoName(propsWindow->demoName());
+    model->setSaveName(propsWindow->saveName());
+    model->setSeeds(propsWindow->SSeed(), propsWindow->NSSeed());
 }

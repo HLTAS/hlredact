@@ -608,3 +608,61 @@ QString FrameModel::fileName() const
 {
     return scriptFileName;
 }
+
+QString FrameModel::demoName() const
+{
+    const auto props = hltasInput.GetProperties();
+    try {
+        return QString::fromStdString(props.at("demo"));
+    } catch (std::out_of_range) {
+        return QString();
+    }
+}
+
+QString FrameModel::saveName() const
+{
+    const auto props = hltasInput.GetProperties();
+    try {
+        return QString::fromStdString(props.at("save"));
+    } catch (std::out_of_range) {
+        return QString();
+    }
+}
+
+bool FrameModel::seeds(unsigned int &SSeed, unsigned int &NSSeed) const
+{
+    const auto props = hltasInput.GetProperties();
+    QVector<QStringRef> seedTexts;
+    try {
+        seedTexts = QString::fromStdString(props.at("seed")).splitRef(' ');
+    } catch (std::out_of_range) {
+        return false;
+    }
+
+    SSeed = 0;
+    NSSeed = 0;
+
+    try {
+        SSeed = seedTexts.at(0).toUInt();
+        NSSeed = seedTexts.at(1).toUInt();
+    } catch (std::out_of_range) {
+    }
+
+    return true;
+}
+
+void FrameModel::setDemoName(const QString &name)
+{
+    hltasInput.SetProperty("demo", name.toStdString());
+}
+
+void FrameModel::setSaveName(const QString &name)
+{
+    hltasInput.SetProperty("save", name.toStdString());
+}
+
+void FrameModel::setSeeds(unsigned int SSeed, unsigned int NSSeed)
+{
+    hltasInput.SetProperty(
+        "seed", QString("%1 %2").arg(SSeed).arg(NSSeed).toStdString());
+}

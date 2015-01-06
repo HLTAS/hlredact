@@ -10,13 +10,13 @@ PropsWindow::PropsWindow(QWidget *parent, Qt::WindowFlags f)
 
     QLabel *lblDemo = new QLabel("&Demo", this);
     gridLay->addWidget(lblDemo, 0, 0);
-    QLineEdit *editDemo = new QLineEdit(this);
+    editDemo = new QLineEdit(this);
     lblDemo->setBuddy(editDemo);
     gridLay->addWidget(editDemo, 0, 1);
 
     QLabel *lblSave = new QLabel("&Save", this);
     gridLay->addWidget(lblSave, 1, 0);
-    QLineEdit *editSave = new QLineEdit(this);
+    editSave = new QLineEdit(this);
     lblSave->setBuddy(editSave);
     gridLay->addWidget(editSave, 1, 1);
 
@@ -49,4 +49,50 @@ PropsWindow::PropsWindow(QWidget *parent, Qt::WindowFlags f)
 
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+}
+
+void PropsWindow::setDemoName(const QString &name)
+{
+    editDemo->setText(name);
+}
+
+void PropsWindow::setSaveName(const QString &name)
+{
+    editSave->setText(name);
+}
+
+void PropsWindow::setNSSeed(unsigned int seed)
+{
+    editNSSeed->setText(QString::number(seed));
+}
+
+void PropsWindow::setSSeed(unsigned int seed)
+{
+    editSSeed->setText(QString::number(seed));
+}
+
+QString PropsWindow::demoName() const
+{
+    return editDemo->text();
+}
+
+QString PropsWindow::saveName() const
+{
+    return editSave->text();
+}
+
+unsigned int PropsWindow::NSSeed() const
+{
+    return editNSSeed->text().toUInt();
+}
+
+unsigned int PropsWindow::SSeed() const
+{
+    return editSSeed->text().toUInt();
+}
+
+void PropsWindow::clearSeeds()
+{
+    editNSSeed->setText(QString());
+    editSSeed->setText(QString());
 }
