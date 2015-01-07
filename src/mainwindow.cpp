@@ -211,7 +211,7 @@ void RMainWindow::switchCumulativeDisp()
 {
     FrameModel *model = (FrameModel *)tableView->model();
     actSwitchCumulative->setText(
-        model->showCumulativeTimes() ? txtShowCumulativeNums :
-        txtShowCumulativeTimes);
+        model->showCumulativeTimes() ? txtShowCumulativeTimes :
+        txtShowCumulativeNums);
     model->setShowCumulativeTimes(!model->showCumulativeTimes());
 }
