@@ -12,7 +12,8 @@ FrameModel::FrameModel(QObject *parent)
       brushRed(Qt::red),
       brushDarkRed(Qt::darkRed),
       brushDarkGray(Qt::darkGray),
-      brushBlue(Qt::blue)
+      brushBlue(Qt::blue),
+      showCumulTimes(false)
 {
     boldFont.setBold(true);
     italicFont.setItalic(true);
@@ -60,9 +61,15 @@ QVariant FrameModel::headerData(int section, Qt::Orientation orientation,
         else if (role == Qt::TextAlignmentRole && section == IndCmds)
             return Qt::AlignLeft;
     } else if (orientation == Qt::Vertical) {
-        if (role == Qt::DisplayRole)
-            return cumulativeFrameNums[section];
-        else if (role == Qt::TextAlignmentRole)
+        if (role == Qt::DisplayRole) {
+            if (showCumulTimes) {
+                if (cumulativeTimes[section] == -1)
+                    return "und";
+                else
+                    return cumulativeTimes[section];
+            } else
+                return cumulativeFrameNums[section];
+        } else if (role == Qt::TextAlignmentRole)
             return (QVariant)(Qt::AlignRight | Qt::AlignVCenter);
     }
 
@@ -84,7 +91,7 @@ bool FrameModel::setData(const QModelIndex &index, const QVariant &value,
     switch (index.column()) {
     case IndNumRepeat:
         frame.SetRepeats(value.toUInt());
-        updateCumulativeFrameNums();
+        updateCumulative();
         break;
     case IndStrafeInfo: {
         QString input = value.toString();
@@ -172,6 +179,7 @@ bool FrameModel::setData(const QModelIndex &index, const QVariant &value,
         break;
     case IndFrameTime:
         frame.Frametime = value.toString().toStdString();
+        updateCumulative();
         break;
     case IndUse:
         frame.Use = !frame.Use;
@@ -509,7 +517,7 @@ bool FrameModel::openProject(const QString &fileName)
     const std::vector<HLTAS::Frame> &frames = hltasInput.GetFrames();
     beginInsertRows(QModelIndex(), 0, frames.size() - 1);
     endInsertRows();
-    updateCumulativeFrameNums();
+    updateCumulative();
     emit dataChanged(index(0, 0), index(frames.size() - 1, IndLength));
     scriptFileName = fileName;
 
@@ -527,15 +535,45 @@ bool FrameModel::saveProject(const QString &fileName)
     return true;
 }
 
-void FrameModel::updateCumulativeFrameNums()
+void FrameModel::updateCumulative()
 {
-    // This can be slow if there is a huge number of framebulks.
-    cumulativeFrameNums.clear();
     const std::vector<HLTAS::Frame> &frames = hltasInput.GetFrames();
-    cumulativeFrameNums.append(0);
-    for (const HLTAS::Frame &frame : frames) {
-        cumulativeFrameNums.append(cumulativeFrameNums.last() +
-                                   frame.GetRepeats());
+
+    // This can be slow if there is a huge number of framebulks.
+    if (showCumulTimes) {
+        cumulativeTimes.clear();
+        cumulativeTimes.append(0);
+
+        bool init_ft_undef = true;
+        for (size_t i = 0; i < frames.size(); i++) {
+            if (!frames[i].SaveName.empty()) {
+                cumulativeTimes.append(cumulativeTimes.last());
+                continue;
+            }
+
+            float ft;
+            float prev_time;
+
+            if (frames[i].Frametime == "-") {
+                if (init_ft_undef) {
+                    cumulativeTimes.append(-1);
+                    continue;
+                }
+                ft = std::stof(frames[i - 1].Frametime);
+            } else {
+                ft = std::stof(frames[i].Frametime);
+                init_ft_undef = false;
+            }
+            prev_time = cumulativeTimes.last() == -1 ? 0 :
+                cumulativeTimes.last();
+            cumulativeTimes.append(prev_time + ft * frames[i].GetRepeats());
+        }
+    } else {
+        cumulativeFrameNums.clear();
+        cumulativeFrameNums.append(0);
+        for (const HLTAS::Frame &frame : frames)
+            cumulativeFrameNums.append(cumulativeFrameNums.last() +
+                                       frame.GetRepeats());
     }
     emit headerDataChanged(Qt::Vertical, 0, frames.size() - 1);
 }
@@ -549,7 +587,7 @@ void FrameModel::insertFramesFromOther(int row, int count,
     for (int i = row; i < row + count; i++)
         hltasInput.InsertFrame(rowCount(), frames[i]);
     endInsertRows();
-    updateCumulativeFrameNums();
+    updateCumulative();
     emit dataChanged(startInd, index(rowCount() - 1, IndLength));
 }
 
@@ -559,7 +597,7 @@ void FrameModel::insertDuplicateRow(int row)
     HLTAS::Frame frame = hltasInput.GetFrames()[row];
     hltasInput.InsertFrame(row + 1, frame);
     endInsertRows();
-    updateCumulativeFrameNums();
+    updateCumulative();
     emit dataChanged(index(row + 1, 0), index(row + 1, IndLength));
 }
 
@@ -572,7 +610,7 @@ void FrameModel::insertEmptyRow(int row)
     hltasInput.InsertFrame(row + 1, frame);
     insertRow(row);
     endInsertRows();
-    updateCumulativeFrameNums();
+    updateCumulative();
     emit dataChanged(index(row + 1, 0), index(row + 1, IndLength));
 }
 
@@ -584,7 +622,7 @@ void FrameModel::insertSave(int row)
     frame.SaveName = "nextseg";
     hltasInput.InsertFrame(row, frame);
     endInsertRows();
-    updateCumulativeFrameNums();
+    updateCumulative();
     emit dataChanged(index(row, 0), index(row + 1, IndLength));
 }
 
@@ -594,7 +632,7 @@ bool FrameModel::removeRows(int row, int count, const QModelIndex &parent)
     for (int i = row; i < row + count; i++)
         hltasInput.RemoveFrame(i);
     endRemoveRows();
-    updateCumulativeFrameNums();
+    updateCumulative();
     return true;
 }
 
@@ -681,4 +719,17 @@ void FrameModel::setSeeds(unsigned int SSeed, unsigned int NSSeed)
 {
     hltasInput.SetProperty(
         "seed", QString("%1 %2").arg(SSeed).arg(NSSeed).toStdString());
+}
+
+void FrameModel::setShowCumulativeTimes(bool enable)
+{
+    if (enable != showCumulTimes) {
+        showCumulTimes = enable;
+        updateCumulative();
+    }
+}
+
+bool FrameModel::showCumulativeTimes() const
+{
+    return showCumulTimes;
 }

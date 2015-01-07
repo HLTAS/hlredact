@@ -4,6 +4,8 @@ static const QString txtSwitchToMainBuf = "&Switch to main buffer";
 static const QString txtSwitchToWorkBuf = "&Switch to work buffer";
 static const QString txtJoinFramesToMain = "&Join following frames to main";
 static const QString txtJoinFramesToWork = "&Join following frames to work";
+static const QString txtShowCumulativeNums = "Show &cumulative frame numbers";
+static const QString txtShowCumulativeTimes = "Show &cumulative times";
 
 RMainWindow::RMainWindow()
     : QMainWindow(nullptr)
@@ -87,6 +89,9 @@ RMainWindow::RMainWindow()
     QMenu *menuView = menuBar()->addMenu("&View");
     actSwitchBuffer = menuView->addAction(
         txtSwitchToWorkBuf, this, SLOT(switchBuffer()), QKeySequence("Alt+S"));
+    actSwitchCumulative = menuView->addAction(
+        txtShowCumulativeTimes, this, SLOT(switchCumulativeDisp()),
+        QKeySequence("Alt+C"));
 
     QMenu *menuHelp = menuBar()->addMenu("&Help");
     menuHelp->addAction("&About...", this, SLOT(showAbout()));
@@ -200,4 +205,13 @@ void RMainWindow::joinFramesToOther()
     otherModel->insertFramesFromOther(curInd.row(), rowCount - curInd.row(),
                                       *curModel);
     curModel->removeRows(curInd.row(), rowCount - curInd.row());
+}
+
+void RMainWindow::switchCumulativeDisp()
+{
+    FrameModel *model = (FrameModel *)tableView->model();
+    actSwitchCumulative->setText(
+        model->showCumulativeTimes() ? txtShowCumulativeNums :
+        txtShowCumulativeTimes);
+    model->setShowCumulativeTimes(!model->showCumulativeTimes());
 }

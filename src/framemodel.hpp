@@ -35,21 +35,22 @@ public:
     void toggleLgagstFullM(int row);
 
     bool isSaveLine(int row) const;
-
     QString fileName() const;
-
     QString demoName() const;
     QString saveName() const;
     bool seeds(unsigned int &SSeed, unsigned int &NSSeed) const;
+    bool showCumulativeTimes() const;
 
     void setDemoName(const QString &name);
     void setSaveName(const QString &name);
     void setSeeds(unsigned int SSeed, unsigned int NSSeed);
+    void setShowCumulativeTimes(bool enable);
 
 private:
     HLTAS::Input hltasInput;
     QString scriptFileName;
     QVector<unsigned int> cumulativeFrameNums;
+    QVector<float> cumulativeTimes;
     QFont boldFont;
     QFont italicFont;
     QBrush brushBlack;
@@ -61,6 +62,7 @@ private:
     QBrush brushDarkRed;
     QBrush brushDarkGray;
     QBrush brushBlue;
+    bool showCumulTimes;
 
     QString getDataText(int row, int column, int role) const;
     QFont getDataFont(int row, int column) const;
@@ -68,7 +70,7 @@ private:
     QBrush getDataForeground(int row, int column) const;
     QString getHHeaderText(int section) const;
 
-    void updateCumulativeFrameNums();
+    void updateCumulative();
 };
 
 #endif
