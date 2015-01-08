@@ -151,7 +151,8 @@ void RMainWindow::saveACopy()
 
 void RMainWindow::switchBuffer()
 {
-    if (tableView->model() == mainFrameModel) {
+    FrameModel *model = (FrameModel *)tableView->model();
+    if (model == mainFrameModel) {
         tableView->setModel(workFrameModel);
         actJoinFramesToOther->setText(txtJoinFramesToMain);
         actSwitchBuffer->setText(txtSwitchToMainBuf);
@@ -163,8 +164,11 @@ void RMainWindow::switchBuffer()
     setWindowTitle(QString("%1 (%2)")
                    .arg(APP_NAME)
                    .arg(getCurrentBufName()));
-    actProperties->setDisabled(
-        ((FrameModel *)tableView->model())->fileName().isEmpty());
+    model = (FrameModel *)tableView->model();
+    actSwitchCumulative->setText(
+        model->showCumulativeTimes() ? txtShowCumulativeNums :
+        txtShowCumulativeTimes);
+    actProperties->setDisabled(model->fileName().isEmpty());
 }
 
 QString RMainWindow::getCurrentBufName() const
