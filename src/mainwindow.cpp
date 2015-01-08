@@ -80,8 +80,6 @@ RMainWindow::RMainWindow()
     menuEdit->addAction("&Undo");
     menuEdit->addAction("&Redo");
     menuEdit->addSeparator();
-    menuEdit->addAction("&Find...");
-    menuEdit->addSeparator();
     actJoinFramesToOther = menuEdit->addAction(
         txtJoinFramesToWork, this, SLOT(joinFramesToOther()),
         QKeySequence("F2"));
