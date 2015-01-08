@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_HPP
 #define MAINWINDOW_HPP
 
+#include <limits>
 #include <QApplication>
 #include <QMainWindow>
 #include <QTableView>
@@ -41,8 +42,10 @@ private slots:
     void switchBuffer();
     void switchCumulativeDisp();
     void joinFramesToOther();
+    void jumpToPosition();
 
 private:
+    QAction *actJumpToPosition;
     QAction *actJoinFramesToOther;
     QAction *actSwitchCumulative;
     QAction *actSwitchBuffer;

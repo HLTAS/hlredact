@@ -34,12 +34,15 @@ public:
     void toggleDB4CCeil(int row);
     void toggleLgagstFullM(int row);
 
+    int rowAfterFrame(unsigned int frame) const;
+    int rowAfterTime(float time) const;
     bool isSaveLine(int row) const;
     QString fileName() const;
     QString demoName() const;
     QString saveName() const;
     bool seeds(unsigned int &SSeed, unsigned int &NSSeed) const;
     bool showCumulativeTimes() const;
+    bool timeUndefined() const;
 
     void setDemoName(const QString &name);
     void setSaveName(const QString &name);

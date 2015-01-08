@@ -6,6 +6,8 @@ static const QString txtJoinFramesToMain = "&Join following frames to main";
 static const QString txtJoinFramesToWork = "&Join following frames to work";
 static const QString txtShowCumulativeNums = "Show &cumulative frame numbers";
 static const QString txtShowCumulativeTimes = "Show &cumulative times";
+static const QString txtJumpToFrame = "Jump &to frame";
+static const QString txtJumpToTime = "Jump &to time";
 
 RMainWindow::RMainWindow()
     : QMainWindow(nullptr)
@@ -92,6 +94,8 @@ RMainWindow::RMainWindow()
     actSwitchCumulative = menuView->addAction(
         txtShowCumulativeTimes, this, SLOT(switchCumulativeDisp()),
         QKeySequence("Alt+C"));
+    actJumpToPosition = menuView->addAction(
+        txtJumpToFrame, this, SLOT(jumpToPosition()), QKeySequence("Alt+G"));
 
     QMenu *menuHelp = menuBar()->addMenu("&Help");
     menuHelp->addAction("&About...", this, SLOT(showAbout()));
@@ -168,6 +172,9 @@ void RMainWindow::switchBuffer()
     actSwitchCumulative->setText(
         model->showCumulativeTimes() ? txtShowCumulativeNums :
         txtShowCumulativeTimes);
+    actJumpToPosition->setText(
+        model->showCumulativeTimes() ? txtJumpToTime :
+        txtJumpToFrame);
     actProperties->setDisabled(model->fileName().isEmpty());
 }
 
@@ -217,5 +224,45 @@ void RMainWindow::switchCumulativeDisp()
     actSwitchCumulative->setText(
         model->showCumulativeTimes() ? txtShowCumulativeTimes :
         txtShowCumulativeNums);
+    actJumpToPosition->setText(
+        model->showCumulativeTimes() ? txtJumpToFrame :
+        txtJumpToTime);
     model->setShowCumulativeTimes(!model->showCumulativeTimes());
+}
+
+void RMainWindow::jumpToPosition()
+{
+    FrameModel *model = (FrameModel *)tableView->model();
+    int row;
+
+    if (model->showCumulativeTimes()) {
+        if (model->timeUndefined()) {
+            QMessageBox::warning(
+                this, "Undefined time",
+                "Frametime is undefined for the first framebulk.");
+            return;
+        }
+
+        bool ok;
+        float time = QInputDialog::getDouble(
+            this, "Jump to frame", "Time position:", 0, 0,
+            std::numeric_limits<float>::max(), 10, &ok);
+        if (!ok)
+            return;
+        row = model->rowAfterTime(time);
+    } else {
+        bool ok;
+        int frame = QInputDialog::getInt(
+            this, "Jump to frame", "Frame position:", 0, 0,
+            std::numeric_limits<int>::max(), 5, &ok);
+        if (!ok)
+            return;
+        row = model->rowAfterFrame(frame);
+    }
+
+    if (row == -1)
+        return;
+
+    QModelIndex ind = tableView->currentIndex();
+    tableView->setCurrentIndex(model->index(row, ind.column()));
 }

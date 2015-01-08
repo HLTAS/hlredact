@@ -733,3 +733,32 @@ bool FrameModel::showCumulativeTimes() const
 {
     return showCumulTimes;
 }
+
+int FrameModel::rowAfterFrame(unsigned int frame) const
+{
+    for (int i = 0; i < cumulativeFrameNums.size(); i++)
+        if (frame == cumulativeFrameNums[i])
+            return i;
+        else if (frame < cumulativeFrameNums[i])
+            return i - 1;
+    return -1;
+}
+
+int FrameModel::rowAfterTime(float time) const
+{
+    for (int i = 0; i < cumulativeTimes.size(); i++)
+        // If the diff is less than 0.001%
+        if (std::fabs(time - cumulativeTimes[i]) < 1e-5 * time)
+            return i;
+        else if (time < cumulativeTimes[i])
+            return i - 1;
+    return -1;
+}
+
+bool FrameModel::timeUndefined() const
+{
+    const std::vector<HLTAS::Frame> &frames = hltasInput.GetFrames();
+    if (frames.empty())
+        return false;
+    return frames[0].Frametime == "-";
+}
