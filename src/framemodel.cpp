@@ -120,6 +120,9 @@ bool FrameModel::setData(const QModelIndex &index, const QVariant &value,
         } else if (input[1] == 'R') {
             frame.SetDir(HLTAS::StrafeDir::RIGHT);
             frame.SetYawPresent(false);
+        } else if (input[1] == 'B') {
+            frame.SetDir(HLTAS::StrafeDir::BEST);
+            frame.SetYawPresent(false);
         }
 
         break;
@@ -299,6 +302,8 @@ QString FrameModel::getDataText(int row, int column, int role) const
             outstr += 'L';
         else if (frame.GetDir() == HLTAS::StrafeDir::RIGHT)
             outstr += 'R';
+        else if (frame.GetDir() == HLTAS::StrafeDir::BEST)
+            outstr += 'B';
         else if (frame.GetDir() == HLTAS::StrafeDir::YAW)
             outstr += 'Y';
         else if (frame.GetDir() == HLTAS::StrafeDir::POINT)
@@ -343,7 +348,8 @@ QString FrameModel::getDataText(int row, int column, int role) const
         }
 
         if (frame.GetDir() == HLTAS::StrafeDir::LEFT ||
-            frame.GetDir() == HLTAS::StrafeDir::RIGHT)
+            frame.GetDir() == HLTAS::StrafeDir::RIGHT ||
+            frame.GetDir() == HLTAS::StrafeDir::BEST)
             outstr = "NA";
         else if (frame.GetDir() == HLTAS::StrafeDir::POINT) {
             if (frame.GetYawPresent())
@@ -418,7 +424,8 @@ QFont FrameModel::getDataFont(int row, int column) const
     switch (column) {
     case IndYaw:
         if (frame.Strafe && (frame.GetDir() == HLTAS::StrafeDir::LEFT ||
-                             frame.GetDir() == HLTAS::StrafeDir::RIGHT))
+                             frame.GetDir() == HLTAS::StrafeDir::RIGHT ||
+                             frame.GetDir() == HLTAS::StrafeDir::BEST))
             return italicFont;
         break;
     case IndAutoJump:
@@ -495,7 +502,8 @@ QBrush FrameModel::getDataForeground(int row, int column) const
         if (!frame.Strafe)
             break;
         if (frame.GetDir() == HLTAS::StrafeDir::LEFT ||
-            frame.GetDir() == HLTAS::StrafeDir::RIGHT)
+            frame.GetDir() == HLTAS::StrafeDir::RIGHT ||
+            frame.GetDir() == HLTAS::StrafeDir::BEST)
             break;
         if (frame.GetYawPresent())
             break;

@@ -11,7 +11,7 @@ QWidget *StrafeDelegate::createEditor(QWidget *parent,
 {
     QLineEdit *strafeEdit = new QLineEdit(parent);
     strafeEdit->setFrame(false);
-    QRegExp regExp("[-AaDdCcGg][NnYyPpLlRr]");
+    QRegExp regExp("[-AaDdCcGg][NnYyPpLlRrBb]");
     strafeEdit->setValidator(new QRegExpValidator(regExp, strafeEdit));
     strafeEdit->setAlignment(Qt::AlignCenter);
     connect(strafeEdit, SIGNAL(textEdited(const QString &)), this,
