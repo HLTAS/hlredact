@@ -2,6 +2,7 @@
 #define MAINWINDOW_HPP
 
 #include <QMainWindow>
+#include "timelineview.hpp"
 
 class MainWindow : public QMainWindow
 {
@@ -9,6 +10,10 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow();
+
+private:
+    TimeLineScene *timeLineScene;
+    TimeLineView *timeLineView;
 };
 
 #endif
